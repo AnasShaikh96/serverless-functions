@@ -3,7 +3,18 @@ import type { Request, Response } from "express"
 
 export const createFunctionHandler = async (req: Request, res: Response) => {
 
-    // Store the function in DB
+    // const { type, runtime, requestType, fuctionName } = req;
+
+}
+
+
+export const invokeFunctionHandler = async (req: Request, res: Response) => {
+
+
+    
 
 
 }
+
+
+// <domain>/uuid/helloWorld

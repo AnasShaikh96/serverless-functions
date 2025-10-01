@@ -35,9 +35,7 @@ app.use("/users", userRouter);
 
 
 app.use('/somedynamicroute', async (req, res) => {
-
     const intededDir = './src/excutable-funcs'
-
     if (!fs.existsSync(intededDir)) {
         fs.mkdirSync(intededDir)
     } else {
@@ -46,9 +44,25 @@ app.use('/somedynamicroute', async (req, res) => {
             moduel['helloWorld']();
         }
     }
-
     res.send("hello")
 
+})
+
+
+
+app.use('/generatedfunction/:id', async (req, res) => {
+
+    const reqMethod = req;
+
+    switch (reqMethod.method) {
+        case "GET":
+            const moduel = await import(`./excutable-funcs/index`)
+            await moduel.default['helloWorld'](res)
+        default:
+            res.status(200).json({
+                message: 'Invalid method'
+            })
+    }
 })
 
 // console.log("my directory name", __dirname)
