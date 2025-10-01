@@ -9,6 +9,9 @@ import errorHandler from "@/common/middleware/errorHandler";
 import rateLimiter from "@/common/middleware/rateLimiter";
 import requestLogger from "@/common/middleware/requestLogger";
 import { env } from "@/common/utils/envConfig";
+import fs from 'fs'
+import path from "path";
+
 
 const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -21,17 +24,37 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use(helmet());
-app.use(rateLimiter);
+// app.use(rateLimiter);
 
 // Request logging
-app.use(requestLogger);
+// app.use(requestLogger);
 
 // Routes
-app.use("/health-check", healthCheckRouter);
+// app.use("/health-check", healthCheckRouter);
 app.use("/users", userRouter);
 
+
+app.use('/somedynamicroute', async (req, res) => {
+
+    const intededDir = './src/excutable-funcs'
+
+    if (!fs.existsSync(intededDir)) {
+        fs.mkdirSync(intededDir)
+    } else {
+        const moduel = await import(`./excutable-funcs/index`)
+        if (moduel['helloWorld']) {
+            moduel['helloWorld']();
+        }
+    }
+
+    res.send("hello")
+
+})
+
+// console.log("my directory name", __dirname)
+
 // Swagger UI
-app.use(openAPIRouter);
+// app.use(openAPIRouter);
 
 // Error handlers
 app.use(errorHandler());
