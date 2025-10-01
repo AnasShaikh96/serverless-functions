@@ -56,8 +56,8 @@ app.use('/generatedfunction/:id', async (req, res) => {
 
     switch (reqMethod.method) {
         case "GET":
-            const moduel = await import(`./excutable-funcs/index`)
-            await moduel.default['helloWorld'](res)
+            const moduel = require(`./excutable-funcs/index`)
+            await moduel['helloWorld'](res)
         default:
             res.status(200).json({
                 message: 'Invalid method'
