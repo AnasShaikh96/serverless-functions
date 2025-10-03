@@ -10,6 +10,7 @@ import errorHandler from "@/common/middleware/errorHandler";
 // import requestLogger from "@/common/middleware/requestLogger";
 import { env } from "@/common/utils/envConfig";
 import fs from 'fs'
+import { createFunctionHandler } from "./api/functions/functionController";
 // import path from "path";
 
 
@@ -50,20 +51,29 @@ app.use('/somedynamicroute', async (req, res) => {
 
 
 
-app.use('/generatedfunction/:id', async (req, res) => {
+app.use('/generatedfunction/:id/:fnname', async (req, res) => {
 
     const reqMethod = req;
 
+    const query = req.params
+
+    console.log("query param", query)
+
     switch (reqMethod.method) {
         case "GET":
-            const moduel = require(`./excutable-funcs/index`)
-            await moduel['helloWorld'](res)
+            const moduel = require(`./executable-funcs/${query.id}/${query.fnname}.js`)
+            console.log(await moduel[`${query.fnname}`])
+           
+            await moduel[`${query.fnname}`](res)
         default:
             res.status(200).json({
                 message: 'Invalid method'
             })
     }
 })
+
+
+app.use('/dynamictest', createFunctionHandler)
 
 // console.log("my directory name", __dirname)
 
