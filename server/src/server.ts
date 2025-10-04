@@ -57,7 +57,7 @@ app.use('/generatedfunction/:id/:fnname', async (req, res) => {
 
     const query = req.params
 
-    console.log("query param", query)
+    // console.log("query param", query)
 
     switch (reqMethod.method) {
         case "GET":
