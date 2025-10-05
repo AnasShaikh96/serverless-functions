@@ -1,6 +1,6 @@
-import AdmZip from "adm-zip";
+const AdmZip = require("adm-zip");
 
-export async function extractArchive(
+async function extractArchive(
   filepath,
   dirName,
   fnname
@@ -14,3 +14,6 @@ export async function extractArchive(
     console.log(e, "error from other server")
   }
 }
+
+
+module.exports = extractArchive
