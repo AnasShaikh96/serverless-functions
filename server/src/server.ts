@@ -9,10 +9,10 @@ import errorHandler from "@/common/middleware/errorHandler";
 // import rateLimiter from "@/common/middleware/rateLimiter";
 // import requestLogger from "@/common/middleware/requestLogger";
 import { env } from "@/common/utils/envConfig";
-import fs from 'fs'
+import fs from "fs";
 import { createFunctionHandler } from "./api/functions/functionController";
+import functionRouter from "./api/functions/functionRouter";
 // import path from "path";
-
 
 const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -33,47 +33,45 @@ app.use(helmet());
 // Routes
 // app.use("/health-check", healthCheckRouter);
 app.use("/users", userRouter);
+app.use("/functions", functionRouter);
 
 
-app.use('/somedynamicroute', async (req, res) => {
-    const intededDir = './src/excutable-funcs'
-    if (!fs.existsSync(intededDir)) {
-        fs.mkdirSync(intededDir)
-    } else {
-        const moduel = await import(`./excutable-funcs/index`)
-        if (moduel['helloWorld']) {
-            moduel['helloWorld']();
-        }
+
+
+app.use("/somedynamicroute", async (req, res) => {
+  const intededDir = "./src/excutable-funcs";
+  if (!fs.existsSync(intededDir)) {
+    fs.mkdirSync(intededDir);
+  } else {
+    const moduel = await import(`./excutable-funcs/index`);
+    if (moduel["helloWorld"]) {
+      moduel["helloWorld"]();
     }
-    res.send("hello")
+  }
+  res.send("hello");
+});
 
-})
+app.use("/generatedfunction/:id/:fnname", async (req, res) => {
+  const reqMethod = req;
 
+  const query = req.params;
 
+  // console.log("query param", query)
 
-app.use('/generatedfunction/:id/:fnname', async (req, res) => {
+  switch (reqMethod.method) {
+    case "GET":
+      const moduel = require(`./executable-funcs/${query.id}/${query.fnname}.js`);
+      console.log(await moduel[`${query.fnname}`]);
 
-    const reqMethod = req;
+      await moduel[`${query.fnname}`](res);
+    default:
+      res.status(200).json({
+        message: "Invalid method",
+      });
+  }
+});
 
-    const query = req.params
-
-    // console.log("query param", query)
-
-    switch (reqMethod.method) {
-        case "GET":
-            const moduel = require(`./executable-funcs/${query.id}/${query.fnname}.js`)
-            console.log(await moduel[`${query.fnname}`])
-           
-            await moduel[`${query.fnname}`](res)
-        default:
-            res.status(200).json({
-                message: 'Invalid method'
-            })
-    }
-})
-
-
-app.use('/dynamictest', createFunctionHandler)
+// app.use('/dynamictest', createFunctionHandler)
 
 // console.log("my directory name", __dirname)
 
