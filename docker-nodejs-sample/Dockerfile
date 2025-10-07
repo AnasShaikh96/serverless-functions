@@ -23,3 +23,24 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 USER node
 COPY . .
 CMD node src/index.js
+
+FROM base as test
+ENV NODE_ENV test
+RUN --mount=type=bind,source=package.json,target=package.json \
+    --mount=type=bind,source=package-lock.json,target=package-lock.json \
+    --mount=type=cache,target=/root/.npm \
+    npm ci --include=dev
+USER node
+COPY . .
+RUN npm run test
+
+
+# docker build -t node-docker-image-test --progress=plain --no-cache --target test .
+# docker build used to build from specified target
+# -t/--tag is used to assign name followed by name (node-docker-image-test)
+# progress plain is to show output of terminal cleaner
+# no-cache dont use already built cache
+# target is the env from which the code is built from
+# . dot meaning build it here
+
+
