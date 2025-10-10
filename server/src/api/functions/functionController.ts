@@ -6,6 +6,7 @@ import { StatusCodes } from "http-status-codes";
 import path from "path";
 import AdmZip from "adm-zip";
 import { exec } from "child_process";
+import { composeText, makeDockerFile } from "@/common/utils/constants";
 
 const dummyId = "82e5e5f7-fdd7-4b21-8573-cb00cbd9b936";
 
@@ -39,14 +40,13 @@ export const createFunctionHandler = async (req: Request, res: Response) => {
 
     const userBucket = await checkUserFunctionBucket(id);
 
-    // console.log(userBucket.status);
-
+    
     if (userBucket.status === StatusCodes.OK) {
     } else {
       throw new Error("No Function Bucket found");
     }
     // const userDir = `./src/executable-funcs`;
-    // const createDir = `./src/executable-funcs/${dummyId}`;
+    const createDir = `./src/executable-funcs/${dummyId}`;
 
     // if (!fs.existsSync(createDir)) {
     //   fs.mkdirSync(createDir);
@@ -58,70 +58,33 @@ export const createFunctionHandler = async (req: Request, res: Response) => {
     //   "helloDynamic.js"
     // );
 
-    const storedFunctionPath = await storeFunctionBucket(
-      id,
-      "../helloDynamic.js.zip"
-    );
+    // const storedFunctionPath = await storeFunctionBucket(
+    //   id,
+    //   "../helloDynamic.js.zip"
+    // );
 
-    const nodeV = '18.0.0';
-    const fnName = 'index.js'
+    const nodeV = "18.0.0";
 
-    const dockerFiletext = `
-ARG NODE_VERSION=${nodeV}
+    const dockerFiletext = makeDockerFile(nodeV);
 
-FROM node:${nodeV}-alpine
-
-ENV NODE_ENV production
-
-WORKDIR /usr/src/app
-
-RUN --mount=type=bind,source=package.json,target=package.json \\
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \\
-    --mount=type=cache,target=/root/.npm \\
-    npm ci --omit=dev
-    
-USER node
-
-COPY . .
-
-EXPOSE 3000
-
-CMD node ${fnName}
-    `
-
-    const composeText = `
-services:
-  server:
-    build:
-      context: .
-    environment:
-      NODE_ENV: production
-    ports:
-      - 3000:3000
-    `
-
-
-
-
-
-    fs.writeFile(createDir + "/Dockerfile", dockerFiletext, err => {
+    fs.writeFile(createDir + "/Dockerfile", dockerFiletext, (err) => {
       if (err) {
-        console.log("error while creating Dockerfile", err)
+        console.log("error while creating Dockerfile", err);
       }
-    })
+    });
 
-    // fs.writeFile(createDir + '/compose.yaml', composeText, err => {
-    //   console.log("error while creating compose file", err)
-    // })
+    fs.writeFile(createDir + "/compose.yaml", composeText, (err) => {
+      console.log("error while creating compose file", err);
+    });
 
-
-    const dockerCMd = `cd ${createDir} && npm init -y  && npm i && docker compose up --build`
-
+    const dockerCMd = `cd ${createDir} && npm init -y  && npm i && docker compose up --build`;
 
     exec(dockerCMd, (error, stdout, stderr) => {
       if (error) {
         console.error(`exec error: ${error}`);
-        return res.status(500).send(`Error starting container: ${error.message}`);
+        return res
+          .status(500)
+          .send(`Error starting container: ${error.message}`);
       }
       console.log(`Container started: ${stdout}`);
 
@@ -129,9 +92,8 @@ services:
       // For example, by probing a health endpoint on the newly started container,
       // or waiting for a specific log message.
       // For simplicity, we'll assume it's up after the 'docker run' command.
-      res.send('OK: Container is starting/started.');
+      res.send("OK: Container is starting/started.");
     });
-
 
     // res.status(200).json({
     //   message: "Testing funcs",
