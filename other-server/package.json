@@ -2,10 +2,12 @@
   "name": "other-server",
   "version": "1.0.0",
   "main": "index.js",
-  "type":"commonjs",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "jobServer": "nodemon polling.js",
+    "pollWorker": "nodemon polling-worker.js"
   },
   "keywords": [],
   "author": "",
@@ -13,8 +15,10 @@
   "description": "",
   "dependencies": {
     "adm-zip": "^0.5.16",
+    "axios": "^1.12.2",
     "cors": "^2.8.5",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
