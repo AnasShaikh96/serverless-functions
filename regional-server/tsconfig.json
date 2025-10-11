@@ -28,7 +28,7 @@
     "resolveJsonModule": true, // Allows importing JSON files as modules
     "declaration": true, // Generates `.d.ts` files for type definitions
     "allowSyntheticDefaultImports": true, // Allows default imports for CommonJS modules
-    "allowImportingTsExtensions": true, // Allows importing `.ts` files with their extensions
+    // "allowImportingTsExtensions": true, // Allows importing `.ts` files with their extensions
     "verbatimModuleSyntax": true, // Keeps the `import`/`export` syntax as-is without transformation
 
     "paths": {
