@@ -24,7 +24,12 @@ app.set("trust proxy", true);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
-app.use(helmet());
+
+// routes
+app.use("/api/v1/users", userRouter);
+app.use("/api/v1/functions", functionRouter);
+
+// app.use(helmet());
 // app.use(rateLimiter);
 
 // Request logging
@@ -32,44 +37,39 @@ app.use(helmet());
 
 // Routes
 // app.use("/health-check", healthCheckRouter);
-app.use("/users", userRouter);
-app.use("/functions", functionRouter);
 
+// app.use("/somedynamicroute", async (req, res) => {
+//   const intededDir = "./src/excutable-funcs";
+//   if (!fs.existsSync(intededDir)) {
+//     fs.mkdirSync(intededDir);
+//   } else {
+//     const moduel = await import(`./excutable-funcs/index`);
+//     if (moduel["helloWorld"]) {
+//       moduel["helloWorld"]();
+//     }
+//   }
+//   res.send("hello");
+// });
 
+// app.use("/generatedfunction/:id/:fnname", async (req, res) => {
+//   const reqMethod = req;
 
+//   const query = req.params;
 
-app.use("/somedynamicroute", async (req, res) => {
-  const intededDir = "./src/excutable-funcs";
-  if (!fs.existsSync(intededDir)) {
-    fs.mkdirSync(intededDir);
-  } else {
-    const moduel = await import(`./excutable-funcs/index`);
-    if (moduel["helloWorld"]) {
-      moduel["helloWorld"]();
-    }
-  }
-  res.send("hello");
-});
+//   // console.log("query param", query)
 
-app.use("/generatedfunction/:id/:fnname", async (req, res) => {
-  const reqMethod = req;
+//   switch (reqMethod.method) {
+//     case "GET":
+//       const moduel = require(`./executable-funcs/${query.id}/${query.fnname}.js`);
+//       console.log(await moduel[`${query.fnname}`]);
 
-  const query = req.params;
-
-  // console.log("query param", query)
-
-  switch (reqMethod.method) {
-    case "GET":
-      const moduel = require(`./executable-funcs/${query.id}/${query.fnname}.js`);
-      console.log(await moduel[`${query.fnname}`]);
-
-      await moduel[`${query.fnname}`](res);
-    default:
-      res.status(200).json({
-        message: "Invalid method",
-      });
-  }
-});
+//       await moduel[`${query.fnname}`](res);
+//     default:
+//       res.status(200).json({
+//         message: "Invalid method",
+//       });
+//   }
+// });
 
 // app.use('/dynamictest', createFunctionHandler)
 

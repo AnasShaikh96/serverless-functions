@@ -11,8 +11,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 
-app.use("/bucket", bucketRouter);
-app.use("/invocation", invocationRouter);
+app.use("/api/v1/bucket", bucketRouter);
+app.use("/api/v1/invocation", invocationRouter);
 
 app.listen(port, () => {
   console.log(`server up at ${port}`);
