@@ -1,0 +1,31 @@
+{
+  "name": "regional-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx --watch --env-file=.env src/index.ts",
+    "build": "tsc",
+    "start": "node --env-file=.env dist/index.js",
+    "start:dev": "node --import=tsx --watch --env-file=.env src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.7",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.7.1",
+    "tsx": "^4.20.6",
+    "typecript": "^0.0.1-security"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "axios": "^1.12.2",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "uuid": "^13.0.0"
+  }
+}
