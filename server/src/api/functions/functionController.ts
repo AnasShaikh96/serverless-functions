@@ -1,4 +1,5 @@
 import { catchAsync } from "@/common/utils/catchAsync";
+import { sendResponse } from "@/common/utils/response";
 import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
@@ -53,7 +54,7 @@ export const getFunctionHandler = catchAsync(
 
     // db operation
 
-    res.status(200).json({
+    sendResponse(res, 200, "Fetched Data Successfully", {
       succes: true,
     });
   }
@@ -65,7 +66,7 @@ export const getAllFunctionHandler = catchAsync(
 
     // db operation
 
-    res.status(200).json({
+    sendResponse(res, 200, "Fetched All Functions Successfully", {
       succes: true,
     });
   }
@@ -77,7 +78,7 @@ export const updateFunctionHandler = catchAsync(
 
     // db operation
 
-    res.status(200).json({
+    sendResponse(res, 200, "Updated Data Successfully", {
       succes: true,
     });
   }
@@ -89,7 +90,7 @@ export const deleteFunctionHandler = catchAsync(
 
     // db operation
 
-    res.status(200).json({
+    sendResponse(res, 200, "Deleted Function", {
       succes: true,
     });
   }
