@@ -4,6 +4,7 @@ import { userRouter } from "@/api/user/userRouter";
 import errorHandler from "@/common/middleware/errorHandler";
 import { env } from "@/common/utils/envConfig";
 import functionRouter from "./api/functions/functionRouter";
+import pool from "./common/data/db";
 
 // const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -20,8 +21,12 @@ app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/functions", functionRouter);
 
-app.use("/hey", (req, res) => {
-  res.send("Check health");
+app.use("/hey", async (req, res) => {
+
+  const poolDeets = await pool.query("SELECT current_database()")
+  console.log("pool details", poolDeets.rows[0])
+
+  res.send(`Check health ${poolDeets} `);
 });
 
 app.use(errorHandler());
