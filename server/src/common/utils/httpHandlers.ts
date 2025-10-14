@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import type { ZodError, ZodSchema } from "zod";
 
 import { ServiceResponse } from "@/common/models/serviceResponse";
+import { ApiError } from "./ApiError";
 
 export const validateRequest = (schema: ZodSchema) => async (req: Request, res: Response, next: NextFunction) => {
 	try {
@@ -20,7 +21,9 @@ export const validateRequest = (schema: ZodSchema) => async (req: Request, res: 
 				: `Invalid input (${errors.length} errors): ${errors.join("; ")}`;
 
 		const statusCode = StatusCodes.BAD_REQUEST;
-		const serviceResponse = ServiceResponse.failure(errorMessage, null, statusCode);
-		res.status(serviceResponse.statusCode).send(serviceResponse);
+		// const serviceResponse = ServiceResponse.faislure(errorMessage, null, statusCode);
+		// res.status(serviceResponse.statusCode).send(serviceResponse);
+
+		throw new ApiError(statusCode, errorMessage)
 	}
 };

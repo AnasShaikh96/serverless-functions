@@ -1,10 +1,11 @@
 import cors from "cors";
 import express, { type Express } from "express";
 import { userRouter } from "@/api/user/userRouter";
-import errorHandler from "@/common/middleware/errorHandler";
+// import errorHandler from "@/common/middleware/errorHandler";
 import { env } from "@/common/utils/envConfig";
 import functionRouter from "./api/functions/functionRouter";
 import pool from "./common/data/db";
+import { errorHandler } from "./common/utils/ApiError";
 
 // const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -29,6 +30,6 @@ app.use("/hey", async (req, res) => {
   res.send(`Check health ${poolDeets} `);
 });
 
-app.use(errorHandler());
+app.use(errorHandler);
 
 export { app };

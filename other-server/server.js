@@ -23,8 +23,11 @@ app.use(express.json())
 app.use("/user-bucket/:id", (req, res) => {
   const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
 
+
+
   const userId = req.params.id
 
+  console.log("user id", req.params)
   if (!userId) {
     res.status(500).json({
       success: false,

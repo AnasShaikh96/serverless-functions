@@ -3,15 +3,20 @@ import type { Request, Response, Router } from "express";
 import express from "express";
 import {
   createFunctionHandler,
+  createFunctionTable,
   deleteFunctionHandler,
   getAllFunctionHandler,
   getFunctionHandler,
   updateFunctionHandler,
 } from "./functionController";
+import { validateRequest } from "@/common/utils/httpHandlers";
+import { createFunctionSchema } from "@/common/schema/function";
 
 const functionRouter: Router = express.Router();
 
-functionRouter.post("/create", createFunctionHandler);
+
+functionRouter.get('/create-table', createFunctionTable)
+functionRouter.post("/create",  createFunctionHandler);
 // node version
 // zip file
 // fn name
