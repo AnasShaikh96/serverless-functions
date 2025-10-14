@@ -30,6 +30,9 @@ export const updateFunctionSchema = functionSchema.pick({
   fn_zip_file: true
 })
 
+export type UpdateFunctionType = z.infer<typeof updateFunctionSchema>
+
+
 const exampleFunction = {
   id: "b8a56b43-f7e0-44cf-bbfa-0edc9c0cbba7",
   runtime: "Node.js",

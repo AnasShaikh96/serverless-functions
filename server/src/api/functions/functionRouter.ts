@@ -3,7 +3,6 @@ import type { Request, Response, Router } from "express";
 import express from "express";
 import {
   createFunctionHandler,
-  createFunctionTable,
   deleteFunctionHandler,
   getAllFunctionHandler,
   getFunctionHandler,
@@ -15,7 +14,7 @@ import { createFunctionSchema } from "@/common/schema/function";
 const functionRouter: Router = express.Router();
 
 
-functionRouter.get('/create-table', createFunctionTable)
+// functionRouter.get('/create-table', createFunctionTable)
 functionRouter.post("/create",  createFunctionHandler);
 // node version
 // zip file
@@ -26,6 +25,6 @@ functionRouter.post("/create",  createFunctionHandler);
 functionRouter.get("/get/:id", getFunctionHandler);
 functionRouter.get("/getall", getAllFunctionHandler);
 functionRouter.patch("/update", updateFunctionHandler);
-functionRouter.delete("/delete", deleteFunctionHandler);
+functionRouter.delete("/delete/:id", deleteFunctionHandler);
 
 export default functionRouter;
