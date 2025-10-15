@@ -1,6 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
-CREATE TYPE usage_type AS ENUM ('Update', 'Get', 'Post');
+CREATE TYPE usage_type AS ENUM ('patch', 'Get', 'Post');
 CREATE TYPE log_status AS ENUM ('200', '400', '500');    
 
 CREATE TABLE usage (

@@ -8,10 +8,14 @@ import {
   getFunctionHandler,
   updateFunctionHandler,
 } from "./functionController";
+import { validateRequest } from "@/common/utils/httpHandlers";
+import { createFunctionSchema } from "@/common/schema/function";
 
 const functionRouter: Router = express.Router();
 
-functionRouter.post("/create", createFunctionHandler);
+
+// functionRouter.get('/create-table', createFunctionTable)
+functionRouter.post("/create",  createFunctionHandler);
 // node version
 // zip file
 // fn name
@@ -21,6 +25,6 @@ functionRouter.post("/create", createFunctionHandler);
 functionRouter.get("/get/:id", getFunctionHandler);
 functionRouter.get("/getall", getAllFunctionHandler);
 functionRouter.patch("/update", updateFunctionHandler);
-functionRouter.delete("/delete", deleteFunctionHandler);
+functionRouter.delete("/delete/:id", deleteFunctionHandler);
 
 export default functionRouter;
