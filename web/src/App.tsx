@@ -1,33 +1,42 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import EditorValue from './components/editor-value'
+import Terminal from './components/terminal'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      <main className='p-2'>
+        <div>
+          <h2>Function Name</h2>
+
+        </div>
+        <div className='flex mt-4' >
+          <div className='w-36 bg-gray-50 p-3'>
+            <div className='bg-white w-full p-1 flex justify-between items-center'>
+
+              <span> index.js</span>
+
+              <span className='w-3 h-3 bg-gray-400 rounded-full'></span>
+
+
+            </div>
+          </div>
+          <div className='h-[500px] bg-red-200 w-full max-w-[700px] border-2 border-red-300 '>
+            <EditorValue />
+          </div>
+          <div className='w-full ' >
+            <h3>Output</h3>
+            <div>
+              <Terminal />
+            </div>
+          </div>
+        </div>
+
+      </main>
+
     </>
   )
 }

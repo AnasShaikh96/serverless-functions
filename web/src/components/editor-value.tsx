@@ -18,13 +18,13 @@ const EditorValue = () => {
 	}
 
 	function handleEditorDidMount(editor: editor.IStandaloneCodeEditor, monaco: Monaco) {
-		if (editorRef.current) {
+		if (editorRef.current === null) {
 			editorRef.current = editor;
 		}
 	}
 
 	function showValue() {
-		if (editorRef.current) {
+		if (editorRef.current !== null) {
 			alert(editorRef?.current.getValue());
 		}
 	}
@@ -33,7 +33,7 @@ const EditorValue = () => {
 		<>
 			<button onClick={showValue}>Show value</button>
 			<Editor
-				height="90vh"
+				// height="90vh"
 				defaultLanguage="javascript"
 				defaultValue="// some comment"
 				onMount={handleEditorDidMount}

@@ -1,13 +1,19 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Terminal as XTerminal } from '@xterm/xterm'
 import socket from '@/lib/socket';
+import "@xterm/xterm/css/xterm.css";
 
 const Terminal = () => {
 
     const terminalRef = useRef(null);
     const isRenderedRef = useRef(false)
 
+
+    const [terminalData, setTerminalData] = useState<null | string>(null)
+
+
+    console.log("terminalData", terminalData)
 
 
     useEffect(() => {
@@ -16,24 +22,19 @@ const Terminal = () => {
         isRenderedRef.current = true;
 
         const terminal = new XTerminal({
-            rows: 20
+
+            rows: 20,
+            fontSize: 13,
+            fontFamily: '"Menlo for Powerline", Menlo, Consolas, "Liberation Mono", Courier, monospace',
+            convertEol: true,
+            cursorBlink: false,
         })
+
 
         if (terminalRef.current) {
             terminal.open(terminalRef.current)
         }
-
-        terminal.onData((data) => {
-            socket.emit("terminal:write", data)
-        })
-
-
-        function onTerminalData(data: any) {
-            terminal.write(data)
-        }
-
-        socket.emit('terminal:data', onTerminalData)
-
+        terminal.write("asdasda")
     }, [])
 
 
