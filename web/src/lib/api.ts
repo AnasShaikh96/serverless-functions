@@ -1,6 +1,6 @@
 import type { LoginPayload, LoginResponse, RegisterPayload, RegisterResponse, VerifyUserPayload, VerifyUserResponse, ResetPasswordPayload, ResetPasswordResponse, GetProfileResponse, UpdateProfilePayload, UpdateProfileResponse } from "./type"
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3333'
+export const API_URL = 'http://localhost:3333'
 
 const API_BASE = `${API_URL}/api/v1`
 

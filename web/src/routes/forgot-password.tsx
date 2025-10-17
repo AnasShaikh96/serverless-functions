@@ -4,8 +4,6 @@ import AuthLayout from '../layouts/AuthLayout'
 
 export const Route = createFileRoute('/forgot-password')({
   component: () => (
-    <AuthLayout>
       <ForgotPassword />
-    </AuthLayout>
   ),
 })
