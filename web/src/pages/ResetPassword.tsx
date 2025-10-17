@@ -1,4 +1,11 @@
+import { createFileRoute } from '@tanstack/react-router';
 import React from 'react';
+
+export const Route = createFileRoute('/reset-password')({
+  component: () => <ResetPassword />,
+})
+
+
 
 const ResetPassword: React.FC = () => {
   return (
