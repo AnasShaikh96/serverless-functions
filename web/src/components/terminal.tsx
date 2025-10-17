@@ -10,11 +10,6 @@ const Terminal = () => {
     const isRenderedRef = useRef(false)
 
 
-    const [terminalData, setTerminalData] = useState<null | string>(null)
-
-
-    console.log("terminalData", terminalData)
-
 
     useEffect(() => {
 
@@ -22,7 +17,6 @@ const Terminal = () => {
         isRenderedRef.current = true;
 
         const terminal = new XTerminal({
-
             rows: 20,
             fontSize: 13,
             fontFamily: '"Menlo for Powerline", Menlo, Consolas, "Liberation Mono", Courier, monospace',
@@ -34,7 +28,16 @@ const Terminal = () => {
         if (terminalRef.current) {
             terminal.open(terminalRef.current)
         }
-        terminal.write("asdasda")
+        terminal.write(`Response 
+            
+            some 
+
+            level 
+            \
+     of lof
+
+
+            `)
     }, [])
 
 
