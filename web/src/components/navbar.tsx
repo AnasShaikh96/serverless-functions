@@ -1,12 +1,10 @@
-'use client';
-
 import * as React from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '../lib/utils';
 import { Button } from './button';
 import { Sun, Moon, User } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { useMobile } from '@/hooks/use-mobile';
-import { useSidebar } from '@/components/ui/sidebar-context';
+import { useMobile } from '../hooks/useMobile';
+import { useSidebar } from './sidebar-context';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -14,8 +12,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+} from './dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from './avatar';
 
 // Simple logo component for the navbar
 const Logo = (props: React.SVGAttributes<SVGElement>) => {

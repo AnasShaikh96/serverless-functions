@@ -1,16 +1,16 @@
-'use client';
+// 'use client';
 import React, { useEffect, useState } from 'react'
-import { ThemeProvider } from '../ui/theme-provider'
-import { SidebarProvider } from '../ui/sidebar-context'
-import { Navbar01 } from '../ui/navbar'
-import { DashboardLayout } from '../ui/dashboard-layout'
-import { usePathname } from 'next/navigation'
+import { ThemeProvider } from '../components/theme-provider'
+import { SidebarProvider } from '../components/sidebar-context'
+import { Navbar01 } from '../components/navbar'
+import { DashboardLayout } from '../components/dashboard-layout'
+// import { usePathname } from 'next/navigation'
 import { authPath } from '@/lib/constants';
 
 const BodyLayout = ({ children }: { children: React.ReactNode }) => {
 
     const [isAuthenticatedPath, setIsAuthenticatedPath] = useState<boolean | null>(null);
-    const pathname = usePathname();
+    const pathname = '';
     const splitPath = pathname.split('/')[1]
 
     useEffect(() => {

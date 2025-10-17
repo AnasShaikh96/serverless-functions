@@ -1,5 +1,5 @@
 import './global.css';
-import BodyLayout from '@/components/shared/body-layout';
+import BodyLayout from './body-layout';
 
 export const metadata = {
   title: 'Yapper',
