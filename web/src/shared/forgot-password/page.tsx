@@ -12,16 +12,16 @@
 //   FormItem,
 //   FormLabel,
 //   FormMessage,
-// } from '@/components/ui/form'
-// import { Button } from '@/components/ui/button'
+// } from '@/components/form'
+// import { Button } from '@/components/button'
 // import {
 //   Card,
 //   CardContent,
 //   CardDescription,
 //   CardHeader,
 //   CardTitle,
-// } from '@/components/ui/card'
-// import { Input } from '@/components/ui/input'
+// } from '@/components/card'
+// import { Input } from '@/components/input'
 
 // import { emailSchema } from '@/lib/validation-schemas'
 // import { GalleryVerticalEnd } from 'lucide-react'

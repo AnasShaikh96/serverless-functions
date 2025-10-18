@@ -13,18 +13,18 @@
 //   FormItem,
 //   FormLabel,
 //   FormMessage,
-// } from '@/components/ui/form'
-// import { Button } from '@/components/ui/button'
+// } from '@/components/form'
+// import { Button } from '@/components/button'
 // import {
 //   Card,
 //   CardContent,
 //   CardDescription,
 //   CardHeader,
 //   CardTitle,
-// } from '@/components/ui/card'
-// import { Input } from '@/components/ui/input'
-// import { PasswordInput } from '@/components/ui/password-input'
-// // import { PhoneInput } from '@/components/ui/phone-input'
+// } from '@/components/card'
+// import { Input } from '@/components/input'
+// import { PasswordInput } from '@/components/password-input'
+// // import { PhoneInput } from '@/components/phone-input'
 
 // import { registerFormSchema } from '@/lib/validation-schemas'
 // import { useRouter } from 'next/navigation'

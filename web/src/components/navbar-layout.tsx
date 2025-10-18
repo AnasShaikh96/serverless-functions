@@ -1,7 +1,7 @@
 // "use client"
 // import { Menu, Moon, Sun, User } from "lucide-react"
 // import { useTheme } from "next-themes"
-// import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/button"
 // import {
 //   DropdownMenu,
 //   DropdownMenuContent,
@@ -9,8 +9,8 @@
 //   DropdownMenuLabel,
 //   DropdownMenuSeparator,
 //   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu"
-// import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+// } from "@/components/dropdown-menu"
+// import { Avatar, AvatarFallback, AvatarImage } from "@/components/avatar"
 
 // interface NavbarProps {
 //   onMenuClick: () => void

@@ -8,7 +8,7 @@ import { getAccessToken } from '@/lib/api'
 import { Sidebar } from "./sidebar"
 import { useMobile } from "@/hooks/use-mobile"
 // Removed mobile toggle row; keeping imports clean
-import { useSidebar } from "@/components/ui/sidebar-context"
+import { useSidebar } from "@/components/sidebar-context"
 
 interface DashboardLayoutProps {
   children: React.ReactNode

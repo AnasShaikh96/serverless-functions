@@ -14,17 +14,17 @@
 //   FormItem,
 //   FormLabel,
 //   FormMessage,
-// } from '@/components/ui/form'
-// import { Button } from '@/components/ui/button'
+// } from '@/components/form'
+// import { Button } from '@/components/button'
 // import {
 //   Card,
 //   CardContent,
 //   CardDescription,
 //   CardHeader,
 //   CardTitle,
-// } from '@/components/ui/card'
-// import { Input } from '@/components/ui/input'
-// import { PasswordInput } from '@/components/ui/password-input'
+// } from '@/components/card'
+// import { Input } from '@/components/input'
+// import { PasswordInput } from '@/components/password-input'
 
 // import { loginFormSchema } from '@/lib/validation-schemas'
 // import { GalleryVerticalEnd } from 'lucide-react'
