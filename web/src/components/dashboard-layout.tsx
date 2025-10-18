@@ -1,11 +1,9 @@
 import type React from "react"
 
 import { useEffect } from "react"
-// import { useRouter } from 'next/navigation'
 import { getAccessToken } from '@/lib/api'
 import { Sidebar } from "./sidebar"
 import { useMobile } from "@/hooks/useMobile"
-// Removed mobile toggle row; keeping imports clean
 import { useSidebar } from "@/components/sidebar-context"
 import { useRouter } from "@tanstack/react-router"
 

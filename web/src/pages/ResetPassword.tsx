@@ -27,11 +27,8 @@ import { PasswordInput } from '@/components/password-input'
 import { resetPasswordFormSchema } from '@/lib/validation-schemas'
 import { GalleryVerticalEnd } from 'lucide-react'
 import { resetPassword } from '@/lib/api'
-// import { useSearchParams, useRouter } from 'next/navigation'
 
 const formSchema = resetPasswordFormSchema
-
-
 
 const ResetPassword: React.FC = () => {
   // const searchParams = useSearch()

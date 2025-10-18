@@ -1,7 +1,4 @@
 import React from 'react';
-
-
-// import Link from 'next/link'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -25,10 +22,8 @@ import {
 } from '@/components/card'
 import { Input } from '@/components/input'
 import { PasswordInput } from '@/components/password-input'
-// import { PhoneInput } from '@/components/phone-input'
 
 import { registerFormSchema } from '@/lib/validation-schemas'
-// import { useRouter } from 'next/navigation'
 import { register } from '@/lib/api'
 import { GalleryVerticalEnd } from 'lucide-react'
 import { Link, useRouter } from '@tanstack/react-router';
