@@ -1,36 +1,36 @@
-// 'use client';
-import React, { useEffect, useState } from 'react'
-import { ThemeProvider } from '../components/theme-provider'
-import { SidebarProvider } from '../components/sidebar-context'
-import { Navbar01 } from '../components/navbar'
-import { DashboardLayout } from '../components/dashboard-layout'
-// import { usePathname } from 'next/navigation'
-import { authPath } from '@/lib/constants';
+// // 'use client';
+// import React, { useEffect, useState } from 'react'
+// import { ThemeProvider } from '../components/theme-provider'
+// import { SidebarProvider } from '../components/sidebar-context'
+// import { Navbar01 } from '../components/navbar'
+// import { DashboardLayout } from '../components/dashboard-layout'
+// // import { usePathname } from 'next/navigation'
+// import { authPath } from '@/lib/constants';
 
-const BodyLayout = ({ children }: { children: React.ReactNode }) => {
+// const BodyLayout = ({ children }: { children: React.ReactNode }) => {
 
-    const [isAuthenticatedPath, setIsAuthenticatedPath] = useState<boolean | null>(null);
-    const pathname = '';
-    const splitPath = pathname.split('/')[1]
+//     const [isAuthenticatedPath, setIsAuthenticatedPath] = useState<boolean | null>(null);
+//     const pathname = '';
+//     const splitPath = pathname.split('/')[1]
 
-    useEffect(() => {
-        setIsAuthenticatedPath(authPath.includes(splitPath))
-    }, [pathname])
+//     useEffect(() => {
+//         setIsAuthenticatedPath(authPath.includes(splitPath))
+//     }, [pathname])
 
-    if (isAuthenticatedPath) {
-        return <>{children}</>
-    } else {
-        return (
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-                <SidebarProvider>
-                    <Navbar01 />
-                    <DashboardLayout>
-                        {children}
-                    </DashboardLayout>
-                </SidebarProvider>
-            </ThemeProvider>
-        )
-    }
-}
+//     if (isAuthenticatedPath) {
+//         return <>{children}</>
+//     } else {
+//         return (
+//             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+//                 <SidebarProvider>
+//                     <Navbar01 />
+//                     <DashboardLayout>
+//                         {children}
+//                     </DashboardLayout>
+//                 </SidebarProvider>
+//             </ThemeProvider>
+//         )
+//     }
+// }
 
-export default BodyLayout
+// export default BodyLayout

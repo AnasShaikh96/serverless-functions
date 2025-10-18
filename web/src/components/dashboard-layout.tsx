@@ -1,14 +1,13 @@
-"use client"
-
 import type React from "react"
 
 import { useEffect } from "react"
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 import { getAccessToken } from '@/lib/api'
 import { Sidebar } from "./sidebar"
-import { useMobile } from "@/hooks/use-mobile"
+import { useMobile } from "@/hooks/useMobile"
 // Removed mobile toggle row; keeping imports clean
 import { useSidebar } from "@/components/sidebar-context"
+import { useRouter } from "@tanstack/react-router"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -28,7 +27,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   useEffect(() => {
     const token = getAccessToken()
     if (!token) {
-      router.replace('/login')
+      // router.navigate({ href: '/login' })
     }
   }, [router])
 

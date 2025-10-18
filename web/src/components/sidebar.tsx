@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useState } from "react"
 import { FileText, ChevronLeft, ChevronRight, X, PenBoxIcon } from "lucide-react"

@@ -5,10 +5,10 @@ import DashboardLayout from '../layouts/DashboardLayout'
 
 export const Route = createFileRoute('/')({
   component: () => (
-    // <DashboardLayout>
+    <DashboardLayout>
       <ProtectedRoute>
         <App />
       </ProtectedRoute>
-    // </DashboardLayout>
+    </DashboardLayout>
   ),
 })

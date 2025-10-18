@@ -1,17 +1,16 @@
 import React from 'react';
-import { Outlet } from '@tanstack/react-router';
 import { ThemeProvider } from '../components/theme-provider';
 import { SidebarProvider } from '../components/sidebar-context';
 import { Navbar01 } from '../components/navbar';
 import { DashboardLayout } from '../components/dashboard-layout';
 
-const DashboardLayoutWrapper: React.FC = () => {
+const DashboardLayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+    <ThemeProvider attribute="class" enableSystem>
       <SidebarProvider>
         <Navbar01 />
         <DashboardLayout>
-          <Outlet />
+          {children}
         </DashboardLayout>
       </SidebarProvider>
     </ThemeProvider>
