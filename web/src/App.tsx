@@ -1,9 +1,9 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 import EditorValue from './components/editor-value'
 import Terminal from './components/terminal'
 
 function App() {
-  const [count, setCount] = useState(0)
+  // const [count, setCount] = useState(0)
 
   return (
     <>
