@@ -1,9 +1,77 @@
-// import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import EditorValue from './components/editor-value'
 import Terminal from './components/terminal'
 
 function App() {
-  // const [count, setCount] = useState(0)
+
+  const [editorValue, setEditorValue] = useState<null | string>(null)
+
+  const [responseError, setResponseError] = useState<null | string>(`
+    default 
+    
+    
+    error`)
+
+
+
+  useEffect(() => {
+
+
+
+    const postEditorData = async () => {
+
+
+      try {
+        throw new Error(`Response error for 
+        
+    new 
+    
+    data`)
+        const data = await fetch('http://localhost:8080/api/v1/functions', {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            "Content-Type": 'application/json'
+          },
+          body: JSON.stringify({ runtime: 'Nodejs', fn_name: 'helloWorld.js', fn_zip_file: '' })
+        }).then((res) => res.json())
+          .catch(err => setResponseError(err))
+      } catch (error: Error) {
+
+        if (typeof error === 'string') {
+          // setResponseError(error.message)
+          setResponseError(`This is a 
+            
+            Random 
+            
+            error
+            
+            message`)
+        } else {
+          setResponseError('An unknown error occured')
+        }
+        console.log("error", typeof error, `${error.message}`)
+
+      }
+
+
+      // console.log(data)
+
+    }
+    postEditorData()
+  }, [editorValue])
+
+
+  const updateEditorValue = (data: any) => {
+    setEditorValue(data)
+
+    setResponseError('trigger on update valu')
+  }
+
+
+
+
+
 
   return (
     <>
@@ -25,12 +93,12 @@ function App() {
             </div>
           </div>
           <div className='h-[500px] bg-red-200 w-full max-w-[700px] border-2 border-red-300 '>
-            <EditorValue />
+            <EditorValue updateEditorValue={updateEditorValue} />
           </div>
           <div className='w-full ' >
             <h3>Output</h3>
             <div>
-              <Terminal />
+              <Terminal error={responseError} />
             </div>
           </div>
         </div>

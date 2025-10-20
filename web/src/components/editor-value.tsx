@@ -1,9 +1,10 @@
-import { Editor, type EditorProps, type Monaco } from '@monaco-editor/react';
+import { Editor, type Monaco } from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 
-const EditorValue = () => {
+const EditorValue = ({ updateEditorValue }: { updateEditorValue: (data: string) => void }) => {
 	const editorRef = useRef<null | editor.IStandaloneCodeEditor>(null);
+
 
 
 	function handleEditorValidation(markers: editor.IMarker[]) {
@@ -24,8 +25,11 @@ const EditorValue = () => {
 	}
 
 	function showValue() {
+
 		if (editorRef.current !== null) {
-			alert(editorRef?.current.getValue());
+			// console.log(editorRef.current.getValue())
+			updateEditorValue(editorRef.current.getValue())
+			// alert(editorRef?.current.getValue());
 		}
 	}
 
