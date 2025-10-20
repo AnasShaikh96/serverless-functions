@@ -6,11 +6,7 @@ function App() {
 
   const [editorValue, setEditorValue] = useState<null | string>(null)
 
-  const [responseError, setResponseError] = useState<null | string>(`
-    default 
-    
-    
-    error`)
+  const [responseError, setResponseError] = useState<null | string>(null)
 
 
 
@@ -22,11 +18,11 @@ function App() {
 
 
       try {
-        throw new Error(`Response error for 
+    //     throw new Error(`Response error for 
         
-    new 
+    // new 
     
-    data`)
+    // data`)
         const data = await fetch('http://localhost:8080/api/v1/functions', {
           method: 'POST',
           headers: {
@@ -38,7 +34,7 @@ function App() {
           .catch(err => setResponseError(err))
       } catch (error: Error) {
 
-        if (typeof error === 'string') {
+        if (typeof error.message === 'string') {
           // setResponseError(error.message)
           setResponseError(`This is a 
             
@@ -53,9 +49,6 @@ function App() {
         console.log("error", typeof error, `${error.message}`)
 
       }
-
-
-      // console.log(data)
 
     }
     postEditorData()

@@ -11,52 +11,25 @@ const Terminal = ({ error }: { error: string | null }) => {
     const terminalRef = useRef(null);
     const isRenderedRef = useRef(false)
 
-    useEffect(() => {
+    // if (isRenderedRef.current) return;
+    // isRenderedRef.current = true;
 
-        console.log('the terminal useEffect is working', error)
-
-
-        if (isRenderedRef.current) return;
-        isRenderedRef.current = true;
-
-        const terminal = new XTerminal({
-            rows: 20,
-            fontSize: 13,
-            fontFamily: '"Menlo for Powerline", Menlo, Consolas, "Liberation Mono", Courier, monospace',
-            convertEol: true,
-            cursorBlink: false,
-        })
+    const terminal = new XTerminal({
+        rows: 20,
+        fontSize: 13,
+        fontFamily: '"Menlo for Powerline", Menlo, Consolas, "Liberation Mono", Courier, monospace',
+        convertEol: true,
+        cursorBlink: false,
+    })
 
 
-        if (terminalRef.current) {
-            terminal.open(terminalRef.current)
-        }
+    if (terminalRef.current) {
+        terminal.open(terminalRef.current)
+    }
 
-        console.log("terminal ref", terminal)
-
-
-        // terminal.
-
-
-        if (typeof error === 'string') {
-            terminal.write(error)
-        }
-        // terminal.data
-
-        // terminal.onData(data => {
-        //     terminal.write(data)
-        // })
-
-        // if (typeof error === 'string') {
-        //     console.log('error reaching here', error)
-        //     terminal.clear()
-        //     terminal.write(error)
-        // }
-
-    }, [error])
-
-
-
+    if (typeof error === 'string') {
+        terminal.write(error)
+    }
 
     return (
         <div id='terminal' ref={terminalRef} />
