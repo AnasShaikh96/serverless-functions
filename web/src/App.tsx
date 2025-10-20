@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import EditorValue from './components/editor-value'
-import Terminal from './components/terminal'
+import ReadOnlyTerminal from './components/terminal'
 
 function App() {
 
@@ -57,14 +57,7 @@ function App() {
 
   const updateEditorValue = (data: any) => {
     setEditorValue(data)
-
-    setResponseError('trigger on update valu')
   }
-
-
-
-
-
 
   return (
     <>
@@ -91,7 +84,8 @@ function App() {
           <div className='w-full ' >
             <h3>Output</h3>
             <div>
-              <Terminal error={responseError} />
+            <ReadOnlyTerminal output={responseError} />
+              {/* <Terminal error={responseError} /> */}
             </div>
           </div>
         </div>
