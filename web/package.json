@@ -23,6 +23,7 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "@tailwindcss/vite": "^4.1.14",
     "@tanstack/react-router": "^1.133.3",
+    "@tanstack/react-table": "^8.21.3",
     "@tanstack/router-devtools": "^1.133.3",
     "@tanstack/router-vite-plugin": "^1.133.4",
     "@xterm/xterm": "^5.5.0",
