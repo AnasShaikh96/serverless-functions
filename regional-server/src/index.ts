@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
-import bucketRouter from "./routes/bucketRoutes.ts";
-import invocationRouter from "./routes/invocationRoutes.ts";
+import bucketRouter from "./routes/bucketRoutes";
+import invocationRouter from "./routes/invocationRoutes";
 
 const app = express();
 const port = process.env.PORT;

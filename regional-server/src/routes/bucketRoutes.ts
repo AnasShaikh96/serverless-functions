@@ -1,7 +1,7 @@
 import {
   getUserBucket,
   storeUserFunction,
-} from "../controllers/bucketController.ts";
+} from "../controllers/bucketController";
 import express from "express";
 
 const router = express.Router();
