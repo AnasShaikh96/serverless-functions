@@ -28,3 +28,4 @@ dist-ssr
 
 ./*.zip
 executable-funcs
+data/.minio.sys/tmp/.trash
