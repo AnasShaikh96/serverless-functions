@@ -6,13 +6,13 @@
     
     "baseUrl": "./src",
     /* Module System Settings: */
-    "module": "NodeNext", // Configures Node.js to use ESM module system
+    "module": "nodenext", // Configures Node.js to use ESM module system
     "rootDir": "src", // Specifies the source directory for your code
     "outDir": "dist", // Specifies the output directory for compiled files
     "sourceMap": true, // Enables source maps for easier debugging
 
     /* Module Resolution Strategy: */
-    "moduleResolution": "NodeNext", // Resolves modules using Node’s ESM strategy
+    "moduleResolution": "bundler", // Resolves modules using Node’s ESM strategy
     "moduleDetection": "force", // Forces TypeScript to treat files as modules
 
     /* Interoperability and File Consistency: */
@@ -39,6 +39,6 @@
     // Uncomment this for backend code without DOM APIs
     /* "lib": ["ES2022"] */
   },
-  "include": ["src/**/*"], // Includes the `src` directory in the project
+  "include": ["src/*"], // Includes the `src` directory in the project
   "exclude": ["node_modules", "dist"] // Excludes `node_modules` and `dist` directories from the project
 }

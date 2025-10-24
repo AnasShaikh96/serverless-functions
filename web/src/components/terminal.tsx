@@ -1,51 +1,51 @@
-import { useEffect, useRef, useState } from 'react'
-
-import { Terminal as XTerminal } from '@xterm/xterm'
-import socket from '@/lib/socket';
+import React, { useEffect, useRef } from "react";
+import { Terminal } from "@xterm/xterm";
 import "@xterm/xterm/css/xterm.css";
-
-const Terminal = () => {
-
-    const terminalRef = useRef(null);
-    const isRenderedRef = useRef(false)
-
-
-
-    useEffect(() => {
-
-        if (isRenderedRef.current) return;
-        isRenderedRef.current = true;
-
-        const terminal = new XTerminal({
-            rows: 20,
-            fontSize: 13,
-            fontFamily: '"Menlo for Powerline", Menlo, Consolas, "Liberation Mono", Courier, monospace',
-            convertEol: true,
-            cursorBlink: false,
-        })
-
-
-        if (terminalRef.current) {
-            terminal.open(terminalRef.current)
-        }
-        terminal.write(`Response 
-            
-            some 
-
-            level 
-            \
-     of lof
-
-
-            `)
-    }, [])
-
-
-
-
-    return (
-        <div id='terminal' ref={terminalRef} />
-    )
+interface ReadOnlyTerminalProps {
+	output: string; // new logs to display
+	height?: string; // optional height
 }
 
-export default Terminal
+const ReadOnlyTerminal: React.FC<ReadOnlyTerminalProps> = ({ output, height = "300px" }) => {
+	const containerRef = useRef<HTMLDivElement>(null);
+	const termRef = useRef<Terminal | null>(null);
+
+	// Initialize terminal
+	useEffect(() => {
+		const term = new Terminal({
+			disableStdin: true, // read-only
+			convertEol: true,   // auto-handle newlines
+			cursorBlink: false,
+			fontFamily: "monospace",
+			fontSize: 14,
+			theme: {
+				background: "#0d1117",
+				foreground: "#d0d0d0",
+			},
+		});
+
+		if (containerRef.current) {
+			term.open(containerRef.current);
+			term.writeln("🚀 Terminal initialized.\r\n");
+			term.scrollToBottom();
+		}
+
+		termRef.current = term;
+
+		return () => term.dispose();
+	}, []);
+
+	// Update terminal whenever output changes
+	useEffect(() => {
+		if (termRef.current && typeof output === 'string') {
+			// Clear previous logs if you want full replacement
+			//   termRef.current.clear();
+			termRef.current.write(output.replace(/\r?\n/g, "\r\n"));
+			termRef.current.scrollToBottom();
+		}
+	}, [output]);
+
+	return <div ref={containerRef} style={{ height, width: "100%" }} />;
+};
+
+export default ReadOnlyTerminal;
