@@ -7,41 +7,6 @@ import { createFunctionService, deleteFunctionByIdService, getAllFunctionsServic
 import { CreateFunctionType } from "@/common/schema/function";
 import pool from "@/common/data/db";
 
-
-
-
-
-// export const createFunctionTable = async () => {
-//   try {
-
-//     const query = `
-//     CREATE EXTENSION IF NOT EXISTS pgcrypto;
-
-//     CREATE TABLE IF NOT EXISTS usages (
-//     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-//     usage_type VARCHAR(50) NOT NULL, 
-//     log_status VARCHAR(50) NOT NULL,
-//     output TEXT NOT NULL,    
-//     execution_time INT NOT NULL,
-//     times_used INT DEFAULT 0,       
-//     access_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//     access_ips TEXT[],            
-//     user_id UUID NOT NULL,
-//     function UUID NOT NULL,
-//     CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
-//     CONSTRAINT fk_function FOREIGN KEY(function) REFERENCES functions(id) ON DELETE CASCADE
-// );`
-//     await pool.query(query);
-//     console.log('table created successfully');
-
-
-//   } catch (error) {
-//     console.error('Error creating table:', error);
-//   } finally {
-//     pool.end()
-//   }
-// }
-
 const dummyId = "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c";
 const dummyFnId = "b1439dce-0ae6-4ae3-b78d-07027a3728e0"
 

@@ -7,6 +7,10 @@ import functionRouter from "./api/functions/functionRouter";
 import pool from "./common/data/db";
 import { errorHandler } from "./common/utils/ApiError";
 
+import { createFunctionTable } from "./common/migrations/20251024_createTable_functions";
+import { createUsageTable } from "./common/migrations/20251024_createTable_usage";
+import { createUserTable } from "./common/migrations/20251024_createTable_users";
+
 // const logger = pino({ name: "server start" });
 const app: Express = express();
 
@@ -23,9 +27,12 @@ app.use("/api/v1/users", userRouter);
 app.use("/api/v1/functions", functionRouter);
 
 app.use("/hey", async (req, res) => {
+  const poolDeets = await pool.query("SELECT current_database()");
+  console.log("pool details", poolDeets.rows[0]);
 
-  const poolDeets = await pool.query("SELECT current_database()")
-  console.log("pool details", poolDeets.rows[0])
+  await createFunctionTable();
+  await createUserTable();
+  await createUsageTable();
 
   res.send(`Check health ${poolDeets} `);
 });

@@ -4,9 +4,15 @@ const minioClient = new Minio.Client({
     endPoint: 'localhost',
     port: 9000,
     useSSL: false,
-    accessKey: 'zeL4QaRXd7xvHsYVfU2v',
-    secretKey: 'LxbezIDEjR8vb8bTRdsxifDTZSePM82Mift7zO17',
+    // accessKey: 'zeL4QaRXd7xvHsYVfU2v',
+    // secretKey: 'LxbezIDEjR8vb8bTRdsxifDTZSePM82Mift7zO17',
+    // Home laptop
+    accessKey: 'YLzQSb0MSrqgtON5szAB',
+    secretKey: '4zJZN8WpWc52lBanEvhRuw82PmFqbYRka1re66qa',
 })
+
+
+
 
 // File to upload
 const sourceFile = './my-test-file.txt'
