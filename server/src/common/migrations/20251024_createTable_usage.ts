@@ -21,10 +21,8 @@ CREATE TABLE usage (
     times_used INT DEFAULT 0,       
     access_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     access_ips TEXT[],             
-    user UUID NOT NULL,             
-    function UUID NOT NULL,         
-    CONSTRAINT fk_user FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_function FOREIGN KEY (function) REFERENCES functions(id) ON DELETE CASCADE
+    owner UUID NOT NULL,             
+    function UUID NOT NULL
 );`
     await pool.query(query);
     console.log('table created successfully');

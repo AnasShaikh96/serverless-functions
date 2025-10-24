@@ -18,9 +18,7 @@ CREATE TABLE users (
     usage UUID[] NOT NULL,      
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT NULL,
-    refreshtoken TEXT NOT NULL,  
-    CONSTRAINT fk_functions FOREIGN KEY (functions) REFERENCES functions(id) ON DELETE CASCADE,
-    CONSTRAINT fk_usage FOREIGN KEY (usage) REFERENCES usage(id) ON DELETE CASCADE
+    refreshtoken TEXT NOT NULL
 );`
     await pool.query(query);
     console.log('table created successfully');

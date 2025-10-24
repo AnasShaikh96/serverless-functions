@@ -1,11 +1,7 @@
-
-
-import pool from '../data/db'
-
+import pool from "../data/db";
 
 export const createFunctionTable = async () => {
   try {
-
     const query = `
    CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
@@ -20,17 +16,13 @@ export const createFunctionTable = async () => {
     update_count INT DEFAULT 0,     
     response_url TEXT,              
     owner UUID NOT NULL,            
-    usage UUID NOT NULL,          
-    CONSTRAINT fk_owner FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_usage FOREIGN KEY (usage) REFERENCES usage(id) ON DELETE CASCADE
-  );`
+    usage UUID NOT NULL    
+  );`;
     await pool.query(query);
-    console.log('table created successfully');
-
-
+    console.log("table created successfully");
   } catch (error) {
-    console.error('Error creating table:', error);
+    console.error("Error creating table:", error);
   } finally {
-    pool.end()
+    pool.end();
   }
-}
+};

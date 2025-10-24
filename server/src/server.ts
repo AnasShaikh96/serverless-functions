@@ -10,6 +10,10 @@ import { errorHandler } from "./common/utils/ApiError";
 import { createFunctionTable } from "./common/migrations/20251024_createTable_functions";
 import { createUsageTable } from "./common/migrations/20251024_createTable_usage";
 import { createUserTable } from "./common/migrations/20251024_createTable_users";
+import { alterFunctionTable } from "./common/migrations/20251024_alterTable_functions";
+import { AlterUsageTable } from "./common/migrations/20251024_alterTable_usage";
+import { AlterUserTable } from "./common/migrations/20251024_alterTable_users";
+import { AlterColumnUsers } from "./common/migrations/20251024_alterColumnFunction_users";
 
 // const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -30,9 +34,10 @@ app.use("/hey", async (req, res) => {
   const poolDeets = await pool.query("SELECT current_database()");
   console.log("pool details", poolDeets.rows[0]);
 
-  await createFunctionTable();
-  await createUserTable();
-  await createUsageTable();
+  // await alterFunctionTable();
+  // await AlterUsageTable();
+  // await AlterColumnUsers()
+  // await AlterUserTable();
 
   res.send(`Check health ${poolDeets} `);
 });
