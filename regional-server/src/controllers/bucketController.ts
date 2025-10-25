@@ -45,34 +45,33 @@ export const storeUserFunction = async (req: Request, res: Response) => {
     "helloDynamic.js"
   );
 
-  const dockerFiletext = makeDockerFile(version);
-  // const dockerFiletext = makeDockerFile("22");
+  // const dockerFiletext = makeDockerFile(version);
 
-  fs.writeFile(createDir + "/Dockerfile", dockerFiletext, (err) => {
-    if (err) {
-      console.log("error while creating Dockerfile", err);
-    }
-  });
+  // fs.writeFile(createDir + "/Dockerfile", dockerFiletext, (err) => {
+  //   if (err) {
+  //     console.log("error while creating Dockerfile", err);
+  //   }
+  // });
 
-  fs.writeFile(createDir + "/compose.yaml", composeText, (err) => {
-    console.log("error while creating compose file", err);
-  });
+  // fs.writeFile(createDir + "/compose.yaml", composeText, (err) => {
+  //   console.log("error while creating compose file", err);
+  // });
 
-  const dockerCMd = `cd ${createDir} && npm init -y  && npm i && docker compose up --build`;
+  // const dockerCMd = `cd ${createDir} && npm init -y  && npm i && docker compose up --build`;
 
-  exec(dockerCMd, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`exec error: ${error}`);
-      return res.status(500).send(`Error starting container: ${error.message}`);
-    }
-    console.log(`Container started: ${stdout}`);
+  // exec(dockerCMd, (error, stdout, stderr) => {
+  //   if (error) {
+  //     console.error(`exec error: ${error}`);
+  //     return res.status(500).send(`Error starting container: ${error.message}`);
+  //   }
+  //   console.log(`Container started: ${stdout}`);
 
-    // You would add logic here to verify the container is truly "up"
-    // For example, by probing a health endpoint on the newly started container,
-    // or waiting for a specific log message.
-    // For simplicity, we'll assume it's up after the 'docker run' command.
-    res.send("OK: Container is starting/started.");
-  });
+  //   // You would add logic here to verify the container is truly "up"
+  //   // For example, by probing a health endpoint on the newly started container,
+  //   // or waiting for a specific log message.
+  //   // For simplicity, we'll assume it's up after the 'docker run' command.
+  //   res.send("OK: Container is starting/started.");
+  // });
 
   const fullUrl = req.protocol + "://" + req.get("host");
 
