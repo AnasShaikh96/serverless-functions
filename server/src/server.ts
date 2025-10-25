@@ -14,6 +14,7 @@ import { alterFunctionTable } from "./common/migrations/20251024_alterTable_func
 import { AlterUsageTable } from "./common/migrations/20251024_alterTable_usage";
 import { AlterUserTable } from "./common/migrations/20251024_alterTable_users";
 import { AlterColumnUsers } from "./common/migrations/20251024_alterColumnFunction_users";
+import { dropAllTable } from "./common/migrations/20251024_dropAll_table";
 
 // const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -38,6 +39,8 @@ app.use("/hey", async (req, res) => {
   // await AlterUsageTable();
   // await AlterColumnUsers()
   // await AlterUserTable();
+
+  await dropAllTable();
 
   res.send(`Check health ${poolDeets} `);
 });

@@ -7,13 +7,13 @@ CREATE TABLE users (
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password TEXT NOT NULL,  
-    functions UUID[] NOT NULL,  
-    usage UUID[] NOT NULL,      
+    -- functions UUID[] NOT NULL,  
+    -- usage UUID[] NOT NULL,      
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT NULL,
     refreshtoken TEXT NOT NULL,  
-    CONSTRAINT fk_functions FOREIGN KEY (functions) REFERENCES functions(id) ON DELETE CASCADE,
-    CONSTRAINT fk_usage FOREIGN KEY (usage) REFERENCES usage(id) ON DELETE CASCADE
+    -- CONSTRAINT fk_functions FOREIGN KEY (functions) REFERENCES functions(id) ON DELETE CASCADE,
+    -- CONSTRAINT fk_usage FOREIGN KEY (usage) REFERENCES usage(id) ON DELETE CASCADE
 );
 
 
