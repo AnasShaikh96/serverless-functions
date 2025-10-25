@@ -7,6 +7,6 @@ import express from "express";
 const router = express.Router();
 
 router.get("/user-bucket/:id", getUserBucket);
-router.get("/store-function", storeUserFunction);
+router.post("/store-function", storeUserFunction);
 
 export default router;

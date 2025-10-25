@@ -1,6 +1,6 @@
-import { composeText } from "../utils/composeText.ts";
-import extractArchive from "../utils/extractArchieve.ts";
-import { makeDockerFile } from "../utils/makeDockerfile.ts";
+import { composeText } from "../utils/composeText";
+import extractArchive from "../utils/extractArchieve";
+import { makeDockerFile } from "../utils/makeDockerfile";
 import { exec } from "child_process";
 import type { Request, Response } from "express";
 import fs from "fs";
@@ -35,9 +35,7 @@ export const getUserBucket = async (req: Request, res: Response) => {
 };
 
 export const storeUserFunction = async (req: Request, res: Response) => {
-  const path = req.body;
-  const id = req.body;
-  const nodeV = req.body;
+  const { path, id, version } = req.body;
 
   const createDir = `./src/function-buckets/${id}`;
 
@@ -47,7 +45,8 @@ export const storeUserFunction = async (req: Request, res: Response) => {
     "helloDynamic.js"
   );
 
-  const dockerFiletext = makeDockerFile(nodeV);
+  const dockerFiletext = makeDockerFile(version);
+  // const dockerFiletext = makeDockerFile("22");
 
   fs.writeFile(createDir + "/Dockerfile", dockerFiletext, (err) => {
     if (err) {

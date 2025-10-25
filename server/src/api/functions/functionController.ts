@@ -3,68 +3,88 @@ import { catchAsync } from "@/common/utils/catchAsync";
 import { sendResponse } from "@/common/utils/response";
 import type { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { createFunctionService, deleteFunctionByIdService, getAllFunctionsService, getFunctionByIdService } from "./functionModel";
+import {
+  createFunctionService,
+  deleteFunctionByIdService,
+  getAllFunctionsService,
+  getFunctionByIdService,
+} from "./functionModel";
 import { CreateFunctionType } from "@/common/schema/function";
 import pool from "@/common/data/db";
 
 const dummyId = "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c";
-const dummyFnId = "b1439dce-0ae6-4ae3-b78d-07027a3728e0"
-
+const dummyFnId = "b1439dce-0ae6-4ae3-b78d-07027a3728e0";
 
 const checkUserFunctionBucket = async (id: string) => {
-  const userExits = await fetch(`http://localhost:3000/user-bucket/${id}`);
+  const userExits = await fetch(
+    `http://localhost:1001/api/v1/bucket/user-bucket/${id}`
+  );
   return userExits;
 };
 
-const storeFunctionBucket = async (id: string, file: string) => {
+const storeFunctionBucket = async (
+  id: string,
+  file: string,
+  runtime: string
+) => {
   try {
     const storeFunction = await fetch(
-      `http://localhost:3000/store-function/${id}`,
+      `http://localhost:1001/api/v1/bucket/store-function`,
       {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ fileUrl: file }),
+        body: JSON.stringify({
+          path: file,
+          id: id,
+          version: runtime,
+        }),
       }
     );
 
     return storeFunction;
   } catch (error) {
-    throw new Error("Could not fetch User Bucket!")
+    throw new Error("Could not fetch User Bucket!");
   }
 };
 
+export const createFunctionHandler = catchAsync(
+  async (req: Request, res: Response) => {
+    const userId = dummyId; //req.user.id as string considering we'll be taking logged in users id  ;
+    const body = req.body as CreateFunctionType;
 
-export const createFunctionHandler = catchAsync(async (req: Request, res: Response) => {
+    // check user bucket exists
+    const userBucket = await checkUserFunctionBucket(userId);
+    console.log(userBucket);
 
-  const userId = dummyId  //req.user.id as string considering we'll be taking logged in users id  ;
-  const body = req.body as CreateFunctionType
+    // if (userBucket.status === StatusCodes.OK) {
 
-  // check user bucket exists
-  const userBucket = await checkUserFunctionBucket(userId)
+    const storedUrl = await storeFunctionBucket(
+      userId,
+      "../../../../helloDynamic.js.zip",
+      body.runtime
+    );
 
-  if (userBucket.status === StatusCodes.OK) {
-
-    const storedUrl = await storeFunctionBucket(userId, '../../../../helloDynamic.js.zip');
+    console.log("storedUrl", storedUrl);
 
     if (storedUrl.status === StatusCodes.OK) {
-
-      const resUrl = await storedUrl.json()
-      const functionData = await createFunctionService({ ...body, response_url: resUrl.functionUrl })
-      sendResponse(res, 200, "Function created successfully!", functionData)
-
+      const resUrl = await storedUrl.json();
+      const functionData = await createFunctionService({
+        ...body,
+        response_url: resUrl.functionUrl,
+      });
+      sendResponse(res, 200, "Function created successfully!", functionData);
     } else {
-      throw new ApiError(500, 'An Error occurred while storing the file')
+      throw new ApiError(500, "An Error occurred while storing the file");
     }
 
-  } else {
-    throw new ApiError(500, "An error ocurred while creating function")
+    // } else {
+    //   throw new ApiError(500, "An error ocurred while creating function, User Bucket does not exists!");
+    // }
   }
-
-})
-
+);
 
 // export const createFunctionHandler = async (req: Request, res: Response) => {
 //   try {
@@ -92,8 +112,7 @@ export const createFunctionHandler = catchAsync(async (req: Request, res: Respon
 
 export const getFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
-
-    const fnId = dummyFnId // get fn id from req params;s
+    const fnId = dummyFnId; // get fn id from req params;s
     const functionData = await getFunctionByIdService(fnId);
     sendResponse(res, 200, "Fetched Data Successfully", functionData);
   }
@@ -103,7 +122,12 @@ export const getAllFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
     const userId = dummyId;
     const allFunctionData = await getAllFunctionsService(userId);
-    sendResponse(res, 200, "Fetched All Functions Successfully", allFunctionData);
+    sendResponse(
+      res,
+      200,
+      "Fetched All Functions Successfully",
+      allFunctionData
+    );
   }
 );
 
