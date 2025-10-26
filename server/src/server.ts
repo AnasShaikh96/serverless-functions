@@ -7,9 +7,9 @@ import functionRouter from "./api/functions/functionRouter";
 import pool from "./common/data/db";
 import { errorHandler } from "./common/utils/ApiError";
 
-import { createFunctionTable } from "./common/migrations/20251024_createTable_functions";
-import { createUsageTable } from "./common/migrations/20251024_createTable_usage";
-import { createUserTable } from "./common/migrations/20251024_createTable_users";
+import { createFunctionTable } from "./common/migrations/20251026_createTableFunctions";
+import { createUsageTable } from "./common/migrations/20251026_createTableUsage";
+import { createUserTable } from "./common/migrations/20251026_createTableUsers";
 import { alterFunctionTable } from "./common/migrations/20251024_alterTable_functions";
 import { AlterUsageTable } from "./common/migrations/20251024_alterTable_usage";
 import { AlterUserTable } from "./common/migrations/20251024_alterTable_users";
@@ -35,12 +35,11 @@ app.use("/hey", async (req, res) => {
   const poolDeets = await pool.query("SELECT current_database()");
   console.log("pool details", poolDeets.rows[0]);
 
-  // await alterFunctionTable();
-  // await AlterUsageTable();
-  // await AlterColumnUsers()
-  // await AlterUserTable();
+  // await createUserTable();
+  // await createFunctionTable();
+  // await createUsageTable();
 
-  await dropAllTable();
+  // await dropAllTable();
 
   res.send(`Check health ${poolDeets} `);
 });
