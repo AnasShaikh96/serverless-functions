@@ -5,12 +5,38 @@ const userSchema = z.object({
   name: z.string().min(1),
   email: z.string().email(),
   password: z.string().min(8),
-  functions: z.array(z.string().uuid()),
-  usage: z.array(z.string().uuid()),
   created_at: z.string(),
   updated_at: z.string().nullable(),
   refreshtoken: z.string(),
 });
+
+export type User = z.infer<typeof userSchema>
+
+
+export const createUserSchema = userSchema.omit({
+  id: true,
+  created_at: true,
+  updated_at: true,
+  refreshtoken: true
+})
+
+export type CreateUser = z.infer<typeof createUserSchema>;
+
+
+export const updateUserSchema = userSchema.omit({
+  created_at: true,
+  updated_at: true,
+  refreshtoken: true
+})
+export type UpdateUser = z.infer<typeof updateUserSchema>;
+
+
+export const loginUserSchema = userSchema.pick({
+  email: true,
+  password: true
+})
+export type LoginUser = z.infer<typeof loginUserSchema>
+
 
 const exampleUser = {
   id: "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c",

@@ -4,6 +4,8 @@ export const createUsageTable = async () => {
   try {
     const query = `
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE TYPE usage_type AS ENUM ('patch', 'Get', 'Post');
+CREATE TYPE log_status AS ENUM ('200', '400', '500');    
 CREATE TABLE usage (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     usage_type TEXT NOT NULL, 

@@ -11,8 +11,8 @@ export const createFunctionService = async (body: CreateFunctionType) => {
   try {
     const { runtime, fn_name, fn_zip_file, owner, response_url } = body;
     const createdFunction = await pool.query(
-      `INSERT INTO functions(runtime, fn_name, fn_zip_file, owner, response_url,usage) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`,
-      [runtime, fn_name, fn_zip_file, owner, response_url, "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c"]
+      `INSERT INTO functions(runtime, fn_name, fn_zip_file, owner, response_url) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [runtime, fn_name, fn_zip_file, owner, response_url]
     );
 
     return createdFunction.rows[0];
