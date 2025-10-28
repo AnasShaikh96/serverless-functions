@@ -10,21 +10,22 @@ import {
 } from "./functionController";
 import { validateRequest } from "@/common/utils/httpHandlers";
 import { createFunctionSchema } from "@/common/schema/function";
+import { verifyToken } from "@/common/middleware/authToken";
 
 const functionRouter: Router = express.Router();
 
 
 // functionRouter.get('/create-table', createFunctionTable)
-functionRouter.post("/create",  createFunctionHandler);
+functionRouter.post("/create", verifyToken, validateRequest(createFunctionSchema), createFunctionHandler);
 // node version
 // zip file
 // fn name
 // trigger method: REST API
 // REQ type doesnt matter, I have to spew output regardless
 
-functionRouter.get("/get/:id", getFunctionHandler);
-functionRouter.get("/getall", getAllFunctionHandler);
-functionRouter.patch("/update", updateFunctionHandler);
-functionRouter.delete("/delete/:id", deleteFunctionHandler);
+functionRouter.get("/get/:id", verifyToken, getFunctionHandler);
+functionRouter.get("/getall", verifyToken, getAllFunctionHandler);
+functionRouter.patch("/update", verifyToken, updateFunctionHandler);
+functionRouter.delete("/delete/:id", verifyToken, deleteFunctionHandler);
 
 export default functionRouter;

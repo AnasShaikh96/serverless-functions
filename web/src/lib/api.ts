@@ -109,3 +109,14 @@ export function getAccessToken(): string | null {
     if (typeof window === 'undefined') return null
     return localStorage.getItem('accessToken')
 }
+
+
+
+
+
+export async function createFunc(payload: any) {
+    return request<any>('/functions/create', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+    })
+}

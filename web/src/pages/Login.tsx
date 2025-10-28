@@ -43,9 +43,13 @@ const Login: React.FC = () => {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const res = await login(values)
+      const res = await login(values);
+      console.log("res", res)
       if (res.accessToken) {
         setAccessToken(res.accessToken)
+      }
+      if(res.data.id){
+        localStorage.setItem('user',res.data.id)
       }
       toast.success(res.message || 'Logged in successfully')
       router.navigate({
