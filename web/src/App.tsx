@@ -6,55 +6,7 @@ import { createFunc } from './lib/api'
 function App() {
 
   const [editorValue, setEditorValue] = useState<null | string>(null)
-
   const [responseError, setResponseError] = useState<string>('')
-
-  // console.log("editorValue", editorValue)
-
-
-
-  useEffect(() => {
-    // const postEditorData = async () => {
-
-
-    //   try {
-    // //     throw new Error(`Response error for 
-
-    // // new 
-
-    // // data`)
-    //     const data = await fetch('http://localhost:8080/api/v1/functions', {
-    //       method: 'POST',
-    //       headers: {
-    //         Accept: 'application/json',
-    //         "Content-Type": 'application/json'
-    //       },
-    //       body: JSON.stringify({ runtime: 'Nodejs', fn_name: 'helloWorld.js', fn_zip_file: '' })
-    //     }).then((res) => res.json())
-    //       .catch(err => setResponseError(err))
-    //   } catch (error: Error) {
-
-    //     if (typeof error.message === 'string') {
-    //       // setResponseError(error.message)
-    //       setResponseError(`This is a 
-
-    //         Random 
-
-    //         error
-
-    //         message`)
-    //     } else {
-    //       setResponseError('An unknown error occured')
-    //     }
-    //     console.log("error", typeof error, `${error.message}`)
-
-    //   }
-
-    // }
-    // postEditorData()
-  }, [editorValue])
-
-
 
   useEffect(() => {
     const user = localStorage.getItem('user')

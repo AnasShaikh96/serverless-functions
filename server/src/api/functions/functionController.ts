@@ -12,6 +12,7 @@ import {
 import { CreateFunctionType } from "@/common/schema/function";
 import pool from "@/common/data/db";
 import { User } from "@/common/schema/user";
+import fs from "fs"
 
 const dummyId = "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c";
 const dummyFnId = "b1439dce-0ae6-4ae3-b78d-07027a3728e0";
@@ -59,8 +60,35 @@ export const createFunctionHandler = catchAsync(
     const body = req.body as CreateFunctionType;
 
 
-    console.log(body)
+    // console.log(body)
 
+    const fileName = `./src/temp/${userId}`
+
+
+    if (!fs.existsSync(fileName)) {
+      fs.mkdirSync(fileName, { recursive: true })
+    } else {
+      fs.writeFile(fileName + `/${Date.now()}_aa1index.js`, body.fn_zip_file, (err) => {
+        if (err) {
+          console.error('Error writing file:', err);
+        }
+        // try {
+        //   if (err) {
+        //     throw new Error('an error happened')
+
+        //     console.error('Error writing file:', err);
+        //   } else {
+        //     throw new Error('something happened')
+        //   }
+        // } catch (error) {
+        //   console.error('Error writing file:', err);
+
+        //   // console.log(`${fileName} created successfully!`);
+        // }
+
+
+      })
+    }
 
     sendResponse(res, 200, "ok func")
 
