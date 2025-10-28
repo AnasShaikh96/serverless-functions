@@ -1,6 +1,6 @@
-import { composeText } from "../utils/composeText.ts";
-import extractArchive from "../utils/extractArchieve.ts";
-import { makeDockerFile } from "../utils/makeDockerfile.ts";
+import { composeText } from "../utils/composeText";
+import extractArchive from "../utils/extractArchieve";
+import { makeDockerFile } from "../utils/makeDockerfile";
 import { exec } from "child_process";
 import type { Request, Response } from "express";
 import fs from "fs";
@@ -35,9 +35,7 @@ export const getUserBucket = async (req: Request, res: Response) => {
 };
 
 export const storeUserFunction = async (req: Request, res: Response) => {
-  const path = req.body;
-  const id = req.body;
-  const nodeV = req.body;
+  const { path, id, version } = req.body;
 
   const createDir = `./src/function-buckets/${id}`;
 
@@ -47,33 +45,33 @@ export const storeUserFunction = async (req: Request, res: Response) => {
     "helloDynamic.js"
   );
 
-  const dockerFiletext = makeDockerFile(nodeV);
+  // const dockerFiletext = makeDockerFile(version);
 
-  fs.writeFile(createDir + "/Dockerfile", dockerFiletext, (err) => {
-    if (err) {
-      console.log("error while creating Dockerfile", err);
-    }
-  });
+  // fs.writeFile(createDir + "/Dockerfile", dockerFiletext, (err) => {
+  //   if (err) {
+  //     console.log("error while creating Dockerfile", err);
+  //   }
+  // });
 
-  fs.writeFile(createDir + "/compose.yaml", composeText, (err) => {
-    console.log("error while creating compose file", err);
-  });
+  // fs.writeFile(createDir + "/compose.yaml", composeText, (err) => {
+  //   console.log("error while creating compose file", err);
+  // });
 
-  const dockerCMd = `cd ${createDir} && npm init -y  && npm i && docker compose up --build`;
+  // const dockerCMd = `cd ${createDir} && npm init -y  && npm i && docker compose up --build`;
 
-  exec(dockerCMd, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`exec error: ${error}`);
-      return res.status(500).send(`Error starting container: ${error.message}`);
-    }
-    console.log(`Container started: ${stdout}`);
+  // exec(dockerCMd, (error, stdout, stderr) => {
+  //   if (error) {
+  //     console.error(`exec error: ${error}`);
+  //     return res.status(500).send(`Error starting container: ${error.message}`);
+  //   }
+  //   console.log(`Container started: ${stdout}`);
 
-    // You would add logic here to verify the container is truly "up"
-    // For example, by probing a health endpoint on the newly started container,
-    // or waiting for a specific log message.
-    // For simplicity, we'll assume it's up after the 'docker run' command.
-    res.send("OK: Container is starting/started.");
-  });
+  //   // You would add logic here to verify the container is truly "up"
+  //   // For example, by probing a health endpoint on the newly started container,
+  //   // or waiting for a specific log message.
+  //   // For simplicity, we'll assume it's up after the 'docker run' command.
+  //   res.send("OK: Container is starting/started.");
+  // });
 
   const fullUrl = req.protocol + "://" + req.get("host");
 

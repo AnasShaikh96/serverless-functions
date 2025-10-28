@@ -11,6 +11,10 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 
+app.use("/check", (req, res) => {
+  res.json("working");
+});
+
 app.use("/api/v1/bucket", bucketRouter);
 app.use("/api/v1/invocation", invocationRouter);
 

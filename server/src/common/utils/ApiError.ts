@@ -43,7 +43,7 @@ export const errorHandler = (err: unknown, req: Request, res: Response, next: Ne
     const status = isAppError ? err.statusCode : 500
     const message = isAppError ? err.message : 'Something went wrong!'
 
-    console.log('inside the error module', isAppError, JSON.stringify(err))
+    console.log('inside the error module', isAppError, err)
 
     //   const details = err instanceof DrizzleQueryError ? err?.cause?.detail ?? 'Something went wrong!' : undefined
     const details = 'Something went wrong!'

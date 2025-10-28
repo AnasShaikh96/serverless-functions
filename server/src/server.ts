@@ -1,19 +1,10 @@
 import cors from "cors";
 import express, { type Express } from "express";
 import { userRouter } from "@/api/user/userRouter";
-// import errorHandler from "@/common/middleware/errorHandler";
-import { env } from "@/common/utils/envConfig";
 import functionRouter from "./api/functions/functionRouter";
 import pool from "./common/data/db";
 import { errorHandler } from "./common/utils/ApiError";
-
-import { createFunctionTable } from "./common/migrations/20251024_createTable_functions";
-import { createUsageTable } from "./common/migrations/20251024_createTable_usage";
-import { createUserTable } from "./common/migrations/20251024_createTable_users";
-import { alterFunctionTable } from "./common/migrations/20251024_alterTable_functions";
-import { AlterUsageTable } from "./common/migrations/20251024_alterTable_usage";
-import { AlterUserTable } from "./common/migrations/20251024_alterTable_users";
-import { AlterColumnUsers } from "./common/migrations/20251024_alterColumnFunction_users";
+import cookieParser from 'cookie-parser'
 
 // const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -24,7 +15,13 @@ app.set("trust proxy", true);
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
+app.use(cors({
+  // origin: env.CORS_ORIGIN, credentials: true,
+  origin: "http://localhost:5174",
+  credentials: true,
+}));
+
+app.use(cookieParser())
 
 // routes
 app.use("/api/v1/users", userRouter);
@@ -34,10 +31,7 @@ app.use("/hey", async (req, res) => {
   const poolDeets = await pool.query("SELECT current_database()");
   console.log("pool details", poolDeets.rows[0]);
 
-  // await alterFunctionTable();
-  // await AlterUsageTable();
-  // await AlterColumnUsers()
-  // await AlterUserTable();
+  // Add table migrations query here and hit this route.
 
   res.send(`Check health ${poolDeets} `);
 });

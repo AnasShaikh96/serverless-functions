@@ -7,9 +7,13 @@ import { ApiError } from "./ApiError";
 
 export const validateRequest = (schema: ZodSchema) => async (req: Request, res: Response, next: NextFunction) => {
 	try {
-		await schema.parseAsync({ body: req.body, query: req.query, params: req.params });
+		console.log("reqbody", req.body)
+		await schema.parseAsync(req.body)
+		// await schema.parseAsync({ body: req.body, query: req.query, params: req.params });
 		next();
 	} catch (err) {
+		console.log("reqbody err", req.body)
+
 		const errors = (err as ZodError).errors.map((e) => {
 			const fieldPath = e.path.length > 0 ? e.path.join(".") : "root";
 			return `${fieldPath}: ${e.message}`;

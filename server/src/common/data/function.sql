@@ -11,9 +11,9 @@ CREATE TABLE functions (
     update_count INT DEFAULT 0,     
     response_url TEXT,              
     owner UUID NOT NULL,            
-    usage UUID NOT NULL,          
+    -- usage UUID NOT NULL,          
     CONSTRAINT fk_owner FOREIGN KEY (owner) REFERENCES users(id) ON DELETE CASCADE,
-    CONSTRAINT fk_usage FOREIGN KEY (usage) REFERENCES usage(id) ON DELETE CASCADE
+    -- CONSTRAINT fk_usage FOREIGN KEY (usage) REFERENCES usage(id) ON DELETE CASCADE
 );
 
 
