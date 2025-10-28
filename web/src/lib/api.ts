@@ -1,21 +1,21 @@
 import type { LoginPayload, LoginResponse, RegisterPayload, RegisterResponse, VerifyUserPayload, VerifyUserResponse, ResetPasswordPayload, ResetPasswordResponse, GetProfileResponse, UpdateProfilePayload, UpdateProfileResponse } from "./type"
 
-export const API_URL = 'http://localhost:3333'
+export const API_URL = 'http://localhost:8080'
 
 const API_BASE = `${API_URL}/api/v1`
 
 async function request<T>(path: string, init?: RequestInit, retryOn401 = true): Promise<T> {
     const response = await fetch(`${API_BASE}${path}`, {
-		credentials: 'include',
-		headers: {
-			'Content-Type': 'application/json',
-			...(init?.headers ?? {}),
-		},
-		...init,
-	})
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            ...(init?.headers ?? {}),
+        },
+        ...init,
+    })
 
-	const isJson = response.headers.get('content-type')?.includes('application/json')
-	const data = isJson ? await response.json() : undefined
+    const isJson = response.headers.get('content-type')?.includes('application/json')
+    const data = isJson ? await response.json() : undefined
 
     if (!response.ok) {
         // If unauthorized, try refreshing token once
@@ -34,23 +34,23 @@ async function request<T>(path: string, init?: RequestInit, retryOn401 = true): 
         throw new Error(message)
     }
 
-	return (data as T)
+    return (data as T)
 }
 
 
 
 export async function login(payload: LoginPayload) {
-	return request<LoginResponse>('/login', {
-		method: 'POST',
-		body: JSON.stringify(payload),
-	})
+    return request<LoginResponse>('/users/login', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+    })
 }
 
 export async function register(payload: RegisterPayload) {
-	return request<RegisterResponse>('/users', {
-		method: 'POST',
-		body: JSON.stringify(payload),
-	})
+    return request<RegisterResponse>('/users', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+    })
 }
 
 export async function verifyUser(payload: VerifyUserPayload) {

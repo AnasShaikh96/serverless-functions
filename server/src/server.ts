@@ -1,7 +1,6 @@
 import cors from "cors";
 import express, { type Express } from "express";
 import { userRouter } from "@/api/user/userRouter";
-import { env } from "@/common/utils/envConfig";
 import functionRouter from "./api/functions/functionRouter";
 import pool from "./common/data/db";
 import { errorHandler } from "./common/utils/ApiError";
@@ -16,7 +15,11 @@ app.set("trust proxy", true);
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: env.CORS_ORIGIN, credentials: true }));
+app.use(cors({
+  // origin: env.CORS_ORIGIN, credentials: true,
+  origin: "http://localhost:5174",
+  credentials: true,
+}));
 
 app.use(cookieParser())
 
