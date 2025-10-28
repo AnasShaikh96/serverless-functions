@@ -8,4 +8,11 @@ export const config = {
     db_name: process?.env?.DATABASE_NAME ?? '',
     db_port: process?.env?.DB_PORT ?? 3000,
     db_password: process?.env?.DB_PASSWORD ?? '',
+    cookieOptions: {
+        httpOnly: true,
+        // secure only in production; localhost over http needs false
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax' as const,
+        path: '/',
+    }
 }

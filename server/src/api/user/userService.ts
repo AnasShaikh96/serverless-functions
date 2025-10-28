@@ -83,6 +83,16 @@ export const userService = new UserRepository();
 //   }
 // }
 
+
+export const findByEmailService = async (email: string) => {
+  try {
+    const querytext = await pool.query(`SELECT * FROM users WHERE email=$1`, [email]);
+    return querytext.rows[0];
+  } catch (error) {
+    throw new ApiError(500, error?.detail ?? 'User with email does not exists', false)
+  }
+}
+
 export const createUserService = async (body: CreateUser) => {
   try {
     const { name, email, password } = body;
@@ -99,10 +109,8 @@ export const createUserService = async (body: CreateUser) => {
 
 export const findByIdService = async (id: string) => {
   try {
-
     const querytext = await pool.query(`SELECT * FROM users WHERE id=$1`, [id]);
     return querytext.rows[0];
-
   } catch (error) {
     throw new ApiError(500, error?.detail ?? 'Could not find user by Id', false)
   }

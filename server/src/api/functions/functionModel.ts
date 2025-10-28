@@ -4,8 +4,6 @@ import {
   UpdateFunctionType,
 } from "@/common/schema/function";
 import { ApiError } from "@/common/utils/ApiError";
-import { catchAsync } from "@/common/utils/catchAsync";
-import type { Request, Response } from "express";
 
 export const createFunctionService = async (body: CreateFunctionType) => {
   try {

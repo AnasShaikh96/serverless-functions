@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express'
-import { config } from './config';
-import { User } from '@/api/user/userModel';
-import { ApiError } from './ApiError';
+import { config } from '../utils/config';
+import { User } from '../schema/user';
+import { ApiError } from '../utils/ApiError';
 import jwt from 'jsonwebtoken'
 
 
