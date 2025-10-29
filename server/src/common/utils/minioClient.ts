@@ -20,18 +20,30 @@ var metaData = {
 
 export const bucketExists = async (userPath: string) => {
   try {
-    const bucket = config.bucket_name + "/" + userPath;
-    const exists = await minioClient.bucketExists(bucket);
+    const bucket = config.bucket_name + "/" + userPath + "/";
+    // const exists = await minioClient.listObjectsV2(
+    //   config.bucket_name,
+    //   userPath,
+    //   false
+    // );
+
+    const exists = await minioClient.statObject(config.bucket_name, userPath);
+
+    // const exists = await minioClient.bucketExists(bucket);
+    // const exists = await minioClient.statObject(config.bucket_name, userPath);
+    console.log("inside the bkt exist func", exists);
     return exists;
   } catch (error) {
+    console.log("inside the bkt exist error", error);
+
     return false;
   }
 };
 
 export const makeBucket = async (userPath: string) => {
-  const bucket = config.bucket_name + "/" + userPath +"/";
+  const bucket = config.bucket_name + "/" + userPath + "/";
   // const bucket = config.bucket_name;
-  const data = await minioClient.makeBucket(bucket,"mumbai");
+  const data = await minioClient.makeBucket(bucket, "mumbai");
   return data;
 };
 

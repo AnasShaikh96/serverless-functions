@@ -70,19 +70,19 @@ export const createFunctionHandler = catchAsync(
       fs.mkdirSync(foldername, { recursive: true });
     }
 
-    const filename = "d98a0220-5255-4a24-a958-e7e0a78972f5_index.js"; //`${uuid4()}_index.js`;
+    const filename = "d98a0220-5255-4a24-a958-e7e0a78972f6_index.js"; //`${uuid4()}_index.js`;
     const filePath = foldername + `/${filename}`;
 
-    const userbktExists = await bucketExists(userId);
+    const userbktExists = await bucketExists(`${userId}/${filename}`);
 
-    console.log(userbktExists);
+    // console.log(userbktExists);
 
     // if (!userbktExists) {
     // await makeBucket(userId);
 
     // }
 
-    await putObject(`${userId}/${filename}`, filePath);
+    // await putObject(`${userId}/${filename}`, filePath);
 
     console.log("userbktExists", userbktExists);
 
