@@ -12,7 +12,14 @@ import {
 import { CreateFunctionType } from "@/common/schema/function";
 import pool from "@/common/data/db";
 import { User } from "@/common/schema/user";
-import fs from "fs"
+import fs from "fs";
+import { writeFile } from "fs/promises";
+import { v4 as uuid4 } from "uuid";
+import {
+  bucketExists,
+  makeBucket,
+  putObject,
+} from "@/common/utils/minioClient";
 
 const dummyId = "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c";
 const dummyFnId = "b1439dce-0ae6-4ae3-b78d-07027a3728e0";
@@ -54,46 +61,70 @@ const storeFunctionBucket = async (
 
 export const createFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
-
-
-    const userId: User['id'] = req.user.id //req.user.id as string considering we'll be taking logged in users id  ;
+    const userId: User["id"] = req.user.id; //req.user.id as string considering we'll be taking logged in users id  ;
     const body = req.body as CreateFunctionType;
 
+    const foldername = `./src/temp/${userId}`;
 
-    // console.log(body)
-
-    const fileName = `./src/temp/${userId}`
-
-
-    if (!fs.existsSync(fileName)) {
-      fs.mkdirSync(fileName, { recursive: true })
-    } else {
-      fs.writeFile(fileName + `/${Date.now()}_aa1index.js`, body.fn_zip_file, (err) => {
-        if (err) {
-          console.error('Error writing file:', err);
-        }
-        // try {
-        //   if (err) {
-        //     throw new Error('an error happened')
-
-        //     console.error('Error writing file:', err);
-        //   } else {
-        //     throw new Error('something happened')
-        //   }
-        // } catch (error) {
-        //   console.error('Error writing file:', err);
-
-        //   // console.log(`${fileName} created successfully!`);
-        // }
-
-
-      })
+    if (!fs.existsSync(foldername)) {
+      fs.mkdirSync(foldername, { recursive: true });
     }
 
-    sendResponse(res, 200, "ok func")
+    const filename = "d98a0220-5255-4a24-a958-e7e0a78972f5_index.js"; //`${uuid4()}_index.js`;
+    const filePath = foldername + `/${filename}`;
 
+    const userbktExists = await bucketExists(userId);
 
+    console.log(userbktExists);
 
+    // if (!userbktExists) {
+    // await makeBucket(userId);
+
+    // }
+
+    await putObject(`${userId}/${filename}`, filePath);
+
+    console.log("userbktExists", userbktExists);
+
+    // writeFile(filePath, body.fn_zip_file, { encoding: "utf8" })
+    //   .then(() => {
+    //     // if()
+    //     // console.log("written file ", res);
+    //     // throw Error("Nakli error");
+    //   })
+    //   .catch((err) => {
+    //     console.log("err while writefil");
+    //     // fs.unlink(filePath, (err) => {
+    //     //   if (err) {
+    //     //     console.log("err while unlinking file");
+    //     //   } else {
+    //     //     console.log("corrupt file removed successfully!");
+    //     //   }
+    //     // });
+    //   });
+
+    // try {
+    //   writeFile(filePath, body.fn_zip_file, (err) => {
+    //     if (err) {
+    //       console.error("Error writing file:", err);
+    //       throw Error("Error while writing file");
+    //     } else {
+    //       throw Error("Nakli error");
+
+    //       console.log(`${filename} created successfully!`);
+    //     }
+    //   });
+    // } catch (error) {
+    //   fs.unlink(filePath, (err) => {
+    //     if (err) {
+    //       console.log("err while unlinking file");
+    //     } else {
+    //       console.log("corrupt file removed successfully!");
+    //     }
+    //   });
+    // }
+
+    sendResponse(res, 200, "ok func");
 
     // // check user bucket exists
     // const userBucket = await checkUserFunctionBucket(userId);

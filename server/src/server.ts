@@ -5,6 +5,10 @@ import functionRouter from "./api/functions/functionRouter";
 import pool from "./common/data/db";
 import { errorHandler } from "./common/utils/ApiError";
 import cookieParser from 'cookie-parser'
+import { dropAllTable } from "./common/migrations/20251024_dropAll_table";
+import { createUserTable } from "./common/migrations/20251026_createTableUsers";
+import { createFunctionTable } from "./common/migrations/20251026_createTableFunctions";
+import { createUsageTable } from "./common/migrations/20251026_createTableUsage";
 
 // const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -17,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
   // origin: env.CORS_ORIGIN, credentials: true,
-  origin: "http://localhost:5174",
+  origin: "http://localhost:5173",
   credentials: true,
 }));
 

@@ -12,7 +12,7 @@ CREATE TABLE users (
     password TEXT NOT NULL,        
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT NULL,
-    refreshtoken TEXT NOT NULL
+    refreshtoken TEXT NULL
 );`;
     await pool.query(query);
     console.log("table created successfully");
