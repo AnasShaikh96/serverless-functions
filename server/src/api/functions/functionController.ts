@@ -13,15 +13,17 @@ import { CreateFunctionType } from "@/common/schema/function";
 import pool from "@/common/data/db";
 import { User } from "@/common/schema/user";
 import fs from "fs";
-import { writeFile } from "fs/promises";
+import { writeFile, unlink } from "fs/promises";
 import { v4 as uuid4 } from "uuid";
 import {
   bucketExists,
+  deleteObject,
   makeBucket,
+  objectExists,
   putObject,
 } from "@/common/utils/minioClient";
 
-const dummyId = "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c";
+// const dummyId = "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c";
 const dummyFnId = "b1439dce-0ae6-4ae3-b78d-07027a3728e0";
 
 const checkUserFunctionBucket = async (id: string) => {
@@ -70,21 +72,83 @@ export const createFunctionHandler = catchAsync(
       fs.mkdirSync(foldername, { recursive: true });
     }
 
-    const filename = "d98a0220-5255-4a24-a958-e7e0a78972f6_index.js"; //`${uuid4()}_index.js`;
+    const filename = `${uuid4()}_index.js`;
     const filePath = foldername + `/${filename}`;
 
-    const userbktExists = await bucketExists(`${userId}/${filename}`);
 
-    // console.log(userbktExists);
+    try {
+      await writeFile(filePath, body.fn_zip_file, { encoding: "utf8" })
+
+      // console.log("file made");
+
+      const data = await putObject(`${userId}/${filename}`, filePath)
+      // console.log(data)
+
+      throw Error("naklo error")
+
+
+    } catch (error) {
+      console.log("caught in func handler ", error)
+
+
+      const objexists = await objectExists(`${userId}/${filename}`);
+
+      console.log("objexists", objexists)
+
+      if (objexists !== undefined) {
+        const deleteobj = await deleteObject(`${userId}/${filename}`);
+        console.log("deleteobj", deleteobj)
+      }
+
+      unlink(filePath)
+
+
+
+      // throw new ApiError(500, 'Internal Server Error: Error occurred while writing file.')
+    }
+
+
+
+
+    // const filewritten = new Promise((resolve, reject) => {
+    //   writeFile(filePath, body.fn_zip_file, { encoding: "utf8" })
+    //     .then(() => resolve('ok') )
+    //     .catch((err) =>  reject(err));
+    // });
+
+    // filewritten.then(async (v) => {
+
+    //   //  putObject(`${userId}/${filename}`, filePath);
+    //   console.log("make buccket",)
+    //   const foo = await makeBucket()
+
+    //   console.log("made ", foo)
+
+    // }).catch((err) => {
+    //   fs.unlink(filePath, (err) => {
+    //     if (err) {
+    //       console.log("err while unlinking file");
+    //     } else {
+    //       console.log("corrupt file removed successfully!");
+    //     }
+    //   });
+    // })
+
+
+
+    // const userbktExists = await bucketExists(`${userId}/${filename}`);
+
+    // console.log("userbktExists", userbktExists);
 
     // if (!userbktExists) {
-    // await makeBucket(userId);
+    //   // await putObject(`${userId}/${filename}`, filePath);
 
+    //   // await makeBucket(userId);
     // }
 
     // await putObject(`${userId}/${filename}`, filePath);
 
-    console.log("userbktExists", userbktExists);
+    // console.log("userbktExists", userbktExists);
 
     // writeFile(filePath, body.fn_zip_file, { encoding: "utf8" })
     //   .then(() => {
@@ -191,7 +255,7 @@ export const getFunctionHandler = catchAsync(
 
 export const getAllFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
-    const userId = dummyId;
+    const userId = req.user.id;
     const allFunctionData = await getAllFunctionsService(userId);
     sendResponse(
       res,

@@ -11,12 +11,13 @@ import {
 import { validateRequest } from "@/common/utils/httpHandlers";
 import { createFunctionSchema } from "@/common/schema/function";
 import { verifyToken } from "@/common/middleware/authToken";
+import { verifyObjectStorage } from "@/common/middleware/objectBucketHanlder";
 
 const functionRouter: Router = express.Router();
 
 
 // functionRouter.get('/create-table', createFunctionTable)
-functionRouter.post("/create", verifyToken, validateRequest(createFunctionSchema), createFunctionHandler);
+functionRouter.post("/create", verifyToken, validateRequest(createFunctionSchema),verifyObjectStorage,  createFunctionHandler);
 // node version
 // zip file
 // fn name

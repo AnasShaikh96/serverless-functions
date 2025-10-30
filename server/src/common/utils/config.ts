@@ -16,4 +16,7 @@ export const config = {
     path: "/",
   },
   bucket_name: "serverless-bucket",
+  cors_origin: process?.env?.CORS_ORIGIN ?? "http://localhost:5174",
+  minio_accesskey: process.env.MINIO_ACCESSKEY ?? 'YLzQSb0MSrqgtON5szAB',
+  minio_secretkey: process.env.MINIO_SECRETKEY ?? '4zJZN8WpWc52lBanEvhRuw82PmFqbYRka1re66qa'
 };
