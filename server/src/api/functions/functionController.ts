@@ -2,7 +2,6 @@ import { ApiError } from "@/common/utils/ApiError";
 import { catchAsync } from "@/common/utils/catchAsync";
 import { sendResponse } from "@/common/utils/response";
 import type { Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
 import {
   createFunctionService,
   deleteFunctionByIdService,
@@ -11,8 +10,10 @@ import {
 } from "./functionModel";
 import { CreateFunctionType } from "@/common/schema/function";
 import pool from "@/common/data/db";
+import { User } from "@/common/schema/user";
+import { handleObjectStorage } from "@/common/utils/objectStorage";
 
-const dummyId = "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c";
+// const dummyId = "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c";
 const dummyFnId = "b1439dce-0ae6-4ae3-b78d-07027a3728e0";
 
 const checkUserFunctionBucket = async (id: string) => {
@@ -50,39 +51,21 @@ const storeFunctionBucket = async (
   }
 };
 
+
+
+
+
 export const createFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
-    const userId = dummyId; //req.user.id as string considering we'll be taking logged in users id  ;
+    // const userId: User["id"] = req.user.id;
     const body = req.body as CreateFunctionType;
 
-    // check user bucket exists
-    const userBucket = await checkUserFunctionBucket(userId);
-    console.log(userBucket);
+    // const storedObject = await handleObjectStorage(userId, body.fn_zip_file)
+    // console.log("storedObject", storedObject)
 
-    // if (userBucket.status === StatusCodes.OK) {
-
-    const storedUrl = await storeFunctionBucket(
-      userId,
-      "../../../../helloDynamic.js.zip",
-      body.runtime
-    );
-
-    console.log("storedUrl", storedUrl);
-
-    if (storedUrl.status === StatusCodes.OK) {
-      const resUrl = await storedUrl.json();
-      const functionData = await createFunctionService({
-        ...body,
-        response_url: resUrl.functionUrl,
-      });
-      sendResponse(res, 200, "Function created successfully!", functionData);
-    } else {
-      throw new ApiError(500, "An Error occurred while storing the file");
-    }
-
-    // } else {
-    //   throw new ApiError(500, "An error ocurred while creating function, User Bucket does not exists!");
-    // }
+    // Function would be created first then we add storage.
+    const data = await createFunctionService({ ...body })
+    sendResponse(res, 200, "Function created successfully!", data);
   }
 );
 
@@ -120,7 +103,7 @@ export const getFunctionHandler = catchAsync(
 
 export const getAllFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
-    const userId = dummyId;
+    const userId = req.user.id;
     const allFunctionData = await getAllFunctionsService(userId);
     sendResponse(
       res,

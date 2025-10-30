@@ -5,6 +5,12 @@ import functionRouter from "./api/functions/functionRouter";
 import pool from "./common/data/db";
 import { errorHandler } from "./common/utils/ApiError";
 import cookieParser from 'cookie-parser'
+import { dropAllTable } from "./common/migrations/20251024_dropAll_table";
+import { createUserTable } from "./common/migrations/20251026_createTableUsers";
+import { createFunctionTable } from "./common/migrations/20251026_createTableFunctions";
+import { createUsageTable } from "./common/migrations/20251026_createTableUsage";
+import { config } from "./common/utils/config";
+import { AlterColumnFnName } from "./common/migrations/20251030_alterColumnFnName_functions";
 
 // const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -16,9 +22,9 @@ app.set("trust proxy", true);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-  // origin: env.CORS_ORIGIN, credentials: true,
-  origin: "http://localhost:5174",
-  credentials: true,
+  origin: config.cors_origin, credentials: true,
+  // origin: "http://localhost:5173",
+  // credentials: true,
 }));
 
 app.use(cookieParser())
@@ -32,6 +38,8 @@ app.use("/hey", async (req, res) => {
   console.log("pool details", poolDeets.rows[0]);
 
   // Add table migrations query here and hit this route.
+
+  // await AlterColumnFnName();
 
   res.send(`Check health ${poolDeets} `);
 });

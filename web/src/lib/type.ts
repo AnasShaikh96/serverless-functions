@@ -1,11 +1,31 @@
-// import { EditorState } from "lexical";
+import z from "zod";
 
-// export interface YapObject {
-//     id: number,
-//     value: string,
-//     title: string,
-//     content: string | EditorState
-// }
+const functionSchema = z.object({
+    id: z.string().uuid(),
+    runtime: z.string().min(1),
+    fn_name: z.string().min(1),
+    fn_zip_file: z.string(),//z.instanceof(Buffer),
+    created_at: z.string(),
+    updated_at: z.string().nullable(),
+    update_count: z.number().int().min(0),
+    response_url: z.string().url().optional(),
+    owner: z.string().uuid(),
+    usage: z.string().uuid(),
+});
+
+
+const createFunctionSchema = functionSchema.omit({
+    id: true,
+    created_at: true,
+    updated_at: true,
+    update_count: true,
+    usage: true,
+    response_url: true
+})
+
+
+export type CreateFunctionPayload = z.infer<typeof createFunctionSchema>
+
 
 export type LoginPayload = {
     email: string

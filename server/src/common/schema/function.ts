@@ -19,7 +19,8 @@ export const createFunctionSchema = functionSchema.omit({
   created_at: true,
   updated_at: true,
   update_count: true,
-  usage: true
+  usage: true,
+  response_url:true
 })
 
 export type CreateFunctionType = z.infer<typeof createFunctionSchema>

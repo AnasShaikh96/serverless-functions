@@ -7,10 +7,10 @@ import { ApiError } from "@/common/utils/ApiError";
 
 export const createFunctionService = async (body: CreateFunctionType) => {
   try {
-    const { runtime, fn_name, fn_zip_file, owner, response_url } = body;
+    const { runtime, fn_name, owner } = body;
     const createdFunction = await pool.query(
-      `INSERT INTO functions(runtime, fn_name, fn_zip_file, owner, response_url) VALUES($1, $2, $3, $4, $5, $6) RETURNING *`,
-      [runtime, fn_name, fn_zip_file, owner, response_url]
+      `INSERT INTO functions(runtime, fn_name, owner) VALUES($1, $2, $3) RETURNING *`,
+      [runtime, fn_name, owner]
     );
 
     return createdFunction.rows[0];
