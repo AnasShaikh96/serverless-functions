@@ -2,7 +2,6 @@ import { ApiError } from "@/common/utils/ApiError";
 import { catchAsync } from "@/common/utils/catchAsync";
 import { sendResponse } from "@/common/utils/response";
 import type { Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
 import {
   createFunctionService,
   deleteFunctionByIdService,
@@ -12,16 +11,7 @@ import {
 import { CreateFunctionType } from "@/common/schema/function";
 import pool from "@/common/data/db";
 import { User } from "@/common/schema/user";
-import fs from "fs";
-import { writeFile, unlink } from "fs/promises";
-import { v4 as uuid4 } from "uuid";
-import {
-  bucketExists,
-  deleteObject,
-  makeBucket,
-  objectExists,
-  putObject,
-} from "@/common/utils/minioClient";
+import { handleObjectStorage } from "@/common/utils/objectStorage";
 
 // const dummyId = "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c";
 const dummyFnId = "b1439dce-0ae6-4ae3-b78d-07027a3728e0";
@@ -61,163 +51,24 @@ const storeFunctionBucket = async (
   }
 };
 
+
+
+
+
 export const createFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
     const userId: User["id"] = req.user.id; //req.user.id as string considering we'll be taking logged in users id  ;
     const body = req.body as CreateFunctionType;
 
-    const foldername = `./src/temp/${userId}`;
+    const storedObject = await handleObjectStorage(userId, body.fn_zip_file)
+    console.log("storedObject", storedObject)
 
-    if (!fs.existsSync(foldername)) {
-      fs.mkdirSync(foldername, { recursive: true });
-    }
-
-    const filename = `${uuid4()}_index.js`;
-    const filePath = foldername + `/${filename}`;
-
-
-    try {
-      await writeFile(filePath, body.fn_zip_file, { encoding: "utf8" })
-
-      // console.log("file made");
-
-      const data = await putObject(`${userId}/${filename}`, filePath)
-      // console.log(data)
-
-      throw Error("naklo error")
-
-
-    } catch (error) {
-      console.log("caught in func handler ", error)
-
-
-      const objexists = await objectExists(`${userId}/${filename}`);
-
-      console.log("objexists", objexists)
-
-      if (objexists !== undefined) {
-        const deleteobj = await deleteObject(`${userId}/${filename}`);
-        console.log("deleteobj", deleteobj)
-      }
-
-      unlink(filePath)
-
-
-
-      // throw new ApiError(500, 'Internal Server Error: Error occurred while writing file.')
-    }
-
-
-
-
-    // const filewritten = new Promise((resolve, reject) => {
-    //   writeFile(filePath, body.fn_zip_file, { encoding: "utf8" })
-    //     .then(() => resolve('ok') )
-    //     .catch((err) =>  reject(err));
-    // });
-
-    // filewritten.then(async (v) => {
-
-    //   //  putObject(`${userId}/${filename}`, filePath);
-    //   console.log("make buccket",)
-    //   const foo = await makeBucket()
-
-    //   console.log("made ", foo)
-
-    // }).catch((err) => {
-    //   fs.unlink(filePath, (err) => {
-    //     if (err) {
-    //       console.log("err while unlinking file");
-    //     } else {
-    //       console.log("corrupt file removed successfully!");
-    //     }
-    //   });
+    // const funcData = await createFunctionService({
+    //   ...body,
+    //   fn_zip_file: storedObject
     // })
 
-
-
-    // const userbktExists = await bucketExists(`${userId}/${filename}`);
-
-    // console.log("userbktExists", userbktExists);
-
-    // if (!userbktExists) {
-    //   // await putObject(`${userId}/${filename}`, filePath);
-
-    //   // await makeBucket(userId);
-    // }
-
-    // await putObject(`${userId}/${filename}`, filePath);
-
-    // console.log("userbktExists", userbktExists);
-
-    // writeFile(filePath, body.fn_zip_file, { encoding: "utf8" })
-    //   .then(() => {
-    //     // if()
-    //     // console.log("written file ", res);
-    //     // throw Error("Nakli error");
-    //   })
-    //   .catch((err) => {
-    //     console.log("err while writefil");
-    //     // fs.unlink(filePath, (err) => {
-    //     //   if (err) {
-    //     //     console.log("err while unlinking file");
-    //     //   } else {
-    //     //     console.log("corrupt file removed successfully!");
-    //     //   }
-    //     // });
-    //   });
-
-    // try {
-    //   writeFile(filePath, body.fn_zip_file, (err) => {
-    //     if (err) {
-    //       console.error("Error writing file:", err);
-    //       throw Error("Error while writing file");
-    //     } else {
-    //       throw Error("Nakli error");
-
-    //       console.log(`${filename} created successfully!`);
-    //     }
-    //   });
-    // } catch (error) {
-    //   fs.unlink(filePath, (err) => {
-    //     if (err) {
-    //       console.log("err while unlinking file");
-    //     } else {
-    //       console.log("corrupt file removed successfully!");
-    //     }
-    //   });
-    // }
-
     sendResponse(res, 200, "ok func");
-
-    // // check user bucket exists
-    // const userBucket = await checkUserFunctionBucket(userId);
-    // console.log(userBucket);
-
-    // // if (userBucket.status === StatusCodes.OK) {
-
-    // const storedUrl = await storeFunctionBucket(
-    //   userId,
-    //   "../../../../helloDynamic.js.zip",
-    //   body.runtime
-    // );
-
-    // console.log("storedUrl", storedUrl);
-
-    // if (storedUrl.status === StatusCodes.OK) {
-    //   const resUrl = await storedUrl.json();
-    //   const functionData = await createFunctionService({
-    //     ...body,
-    //     response_url: resUrl.functionUrl,
-    //   });
-    //   sendResponse(res, 200, "Function created successfully!", functionData);
-    // } else {
-    //   throw new ApiError(500, "An Error occurred while storing the file");
-    // }
-
-    // } else {
-    //   throw new ApiError(500, "An error ocurred while creating function, User Bucket does not exists!");
-    // }
   }
 );
 
