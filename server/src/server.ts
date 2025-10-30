@@ -11,6 +11,7 @@ import { createFunctionTable } from "./common/migrations/20251026_createTableFun
 import { createUsageTable } from "./common/migrations/20251026_createTableUsage";
 import { config } from "./common/utils/config";
 import { AlterColumnFnName } from "./common/migrations/20251030_alterColumnFnName_functions";
+import { AlterColumnFnFileZip } from "./common/migrations/20251030_alterColumnFnFileZip_functions";
 
 // const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -40,7 +41,7 @@ app.use("/hey", async (req, res) => {
   // Add table migrations query here and hit this route.
 
   // await AlterColumnFnName();
-
+  await AlterColumnFnFileZip();
   res.send(`Check health ${poolDeets} `);
 });
 

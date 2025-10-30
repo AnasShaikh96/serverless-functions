@@ -7,17 +7,28 @@ import {
     makeBucket,
     objectExists,
     putObject,
-  } from "@/common/utils/minioClient";
+} from "@/common/utils/minioClient";
 import { ApiError } from "./ApiError";
 
-export const handleObjectStorage = async (userId: string, filecontent: string) => {
+export interface IObjectMetaData {
+    name: string,
+    count?: number,
+    userId: string,
+    fnId?: string;
+}
+
+
+export const handleObjectStorage = async (filecontent: string, metadata: IObjectMetaData) => {
+
+    const { name, count, userId, fnId } = metadata;
+
     const foldername = `./src/temp/${userId}`;
 
     if (!fs.existsSync(foldername)) {
         fs.mkdirSync(foldername, { recursive: true });
     }
 
-    const filename = `${uuid4()}_index.js`;
+    const filename = `${name}.js`;
     const filePath = foldername + `/${filename}`;
     const objectPath = `${userId}/${filename}`;
     try {

@@ -111,12 +111,17 @@ export function getAccessToken(): string | null {
 }
 
 
-
-
-
 export async function createFunc(payload: any) {
     return request<any>('/functions/create', {
         method: 'POST',
+        body: JSON.stringify(payload),
+    })
+}
+
+
+export async function updateFunc(id: string, payload: any) {
+    return request<any>(`/functions/update/${id}`, {
+        method: 'PATCH',
         body: JSON.stringify(payload),
     })
 }

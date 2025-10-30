@@ -116,7 +116,24 @@ export const getAllFunctionHandler = catchAsync(
 
 export const updateFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
-    const id = req.params.id;
+
+    const userId = req.user.id
+    const fnId = req.params.id
+
+    const body = req.body
+
+    const getfn = await getFunctionByIdService(fnId);
+
+
+    // Updating object storage by name and userId to maintain a single file.
+    const objectStorage = await handleObjectStorage(body.fn_zip_file, {
+      name: getfn.fn_name,
+      userId
+    })
+
+    console.log("objectStorage", objectStorage)
+
+
     sendResponse(res, 200, "Updated Data Successfully", {
       succes: true,
     });

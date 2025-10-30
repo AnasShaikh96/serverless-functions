@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import EditorValue from './components/editor-value'
 import ReadOnlyTerminal from './components/terminal'
-import { createFunc } from './lib/api'
+import { createFunc, updateFunc } from './lib/api'
 
 function App() {
 
@@ -13,11 +13,11 @@ function App() {
 
     const postEditorValue = async () => {
 
-      const res = await createFunc({
-        runtime: '18',
-        fn_name: 'helloWorld',
+      const res = await updateFunc("ddf73c34-515d-4d30-86ee-cb64e5d47222", {
+        // runtime: '18',
+        // fn_name: 'helloWorldnew',
         fn_zip_file: editorValue,
-        owner: user
+        // owner: user
       })
 
       console.log("asdasd", res)
@@ -26,9 +26,6 @@ function App() {
     postEditorValue();
 
   }, [editorValue])
-
-
-
 
 
 
