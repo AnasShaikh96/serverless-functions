@@ -57,18 +57,15 @@ const storeFunctionBucket = async (
 
 export const createFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
-    const userId: User["id"] = req.user.id; //req.user.id as string considering we'll be taking logged in users id  ;
+    // const userId: User["id"] = req.user.id;
     const body = req.body as CreateFunctionType;
 
-    const storedObject = await handleObjectStorage(userId, body.fn_zip_file)
-    console.log("storedObject", storedObject)
+    // const storedObject = await handleObjectStorage(userId, body.fn_zip_file)
+    // console.log("storedObject", storedObject)
 
-    // const funcData = await createFunctionService({
-    //   ...body,
-    //   fn_zip_file: storedObject
-    // })
-
-    sendResponse(res, 200, "ok func");
+    // Function would be created first then we add storage.
+    const data = await createFunctionService({ ...body })
+    sendResponse(res, 200, "Function created successfully!", data);
   }
 );
 

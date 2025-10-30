@@ -10,6 +10,7 @@ import { createUserTable } from "./common/migrations/20251026_createTableUsers";
 import { createFunctionTable } from "./common/migrations/20251026_createTableFunctions";
 import { createUsageTable } from "./common/migrations/20251026_createTableUsage";
 import { config } from "./common/utils/config";
+import { AlterColumnFnName } from "./common/migrations/20251030_alterColumnFnName_functions";
 
 // const logger = pino({ name: "server start" });
 const app: Express = express();
@@ -37,6 +38,8 @@ app.use("/hey", async (req, res) => {
   console.log("pool details", poolDeets.rows[0]);
 
   // Add table migrations query here and hit this route.
+
+  // await AlterColumnFnName();
 
   res.send(`Check health ${poolDeets} `);
 });
