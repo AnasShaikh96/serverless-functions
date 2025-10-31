@@ -4,7 +4,7 @@ export const functionSchema = z.object({
   id: z.string().uuid(),
   runtime: z.string().min(1),
   fn_name: z.string().min(1),
-  fn_zip_file: z.string(),//z.instanceof(Buffer),
+  fn_zip_file: z.string(), //z.instanceof(Buffer),
   created_at: z.string(),
   updated_at: z.string().nullable(),
   update_count: z.number().int().min(0),
@@ -13,26 +13,24 @@ export const functionSchema = z.object({
   usage: z.string().uuid(),
 });
 
-
 export const createFunctionSchema = functionSchema.omit({
   id: true,
   created_at: true,
   updated_at: true,
   update_count: true,
   usage: true,
-  response_url:true
-})
+  response_url: true,
+  fn_zip_file: true,
+});
 
-export type CreateFunctionType = z.infer<typeof createFunctionSchema>
-
+export type CreateFunctionType = z.infer<typeof createFunctionSchema>;
 
 export const updateFunctionSchema = functionSchema.pick({
   fn_name: true,
-  fn_zip_file: true
-})
+  fn_zip_file: true,
+});
 
-export type UpdateFunctionType = z.infer<typeof updateFunctionSchema>
-
+export type UpdateFunctionType = z.infer<typeof updateFunctionSchema>;
 
 const exampleFunction = {
   id: "b8a56b43-f7e0-44cf-bbfa-0edc9c0cbba7",
