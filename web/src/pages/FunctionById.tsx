@@ -2,8 +2,14 @@ import { useEffect, useState } from 'react'
 import EditorValue from '@/components/editor-value'
 import ReadOnlyTerminal from '@/components/terminal'
 import { updateFunc } from '@/lib/api'
+import { Route } from '@/routes/function.$functionId'
 
 const FunctionById = () => {
+
+
+  const { functionId } = Route.useParams()
+
+  console.log("functionId sss", functionId)
 
 
   const [editorValue, setEditorValue] = useState<null | string>(null)
@@ -25,10 +31,12 @@ const FunctionById = () => {
         // owner: user
       })
 
-      console.log("asdasd", res)
+      // console.log("asdasd", res)
     }
 
-    postEditorValue();
+    if (editorValue !== null) {
+      postEditorValue();
+    }
 
   }, [editorValue])
 

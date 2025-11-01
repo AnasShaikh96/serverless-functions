@@ -1,10 +1,11 @@
-import React from 'react'
-import GetAllFunctions from './pages/GetAllFunctions'
+// import React from 'react'
+// import GetAllFunctions from './pages/GetAllFunctions'
 
 const App = () => {
   return (
     <div>
-      <GetAllFunctions />
+      <div>Base Route</div>
+      {/* <GetAllFunctions /> */}
     </div>
   )
 }

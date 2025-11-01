@@ -144,9 +144,9 @@ export const columns = [
             </DropdownMenuItem> */}
             {/* <DropdownMenuSeparator /> */}
             <DropdownMenuItem>
-              {/* <Link to={`/function/$functionId`} params={{ functionId: payment.id }} >
+              <Link to={`/function/$functionId`} params={{ functionId: payment.id }} >
                 View function
-              </Link> */}
+              </Link>
             </DropdownMenuItem>
             {/* <DropdownMenuItem>View payment details</DropdownMenuItem> */}
           </DropdownMenuContent>
@@ -156,7 +156,7 @@ export const columns = [
   },
 ]
 
-export function DataTableDemo() {
+export function DataTableDemo({ tableData }: { tableData: any }) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -166,7 +166,7 @@ export function DataTableDemo() {
   const [rowSelection, setRowSelection] = React.useState({})
 
   const table = useReactTable({
-    data,
+    data: tableData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
