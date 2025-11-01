@@ -1,4 +1,3 @@
-"use client"
 
 import * as React from "react"
 import {
@@ -13,17 +12,14 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { MoreHorizontal } from "lucide-react"
 
 import { Button } from "@/components/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/dropdown-menu"
 import { Input } from "@/components/input"
@@ -37,29 +33,11 @@ import {
 } from "@/components/ui/table"
 import { convertDate } from "@/lib/utils"
 import { Link } from "@tanstack/react-router"
+import { GetFunctionPayload } from "@/lib/type"
 
-const data = [
-  {
-    "id": "4dc27ad9-5681-46f4-ab6c-005f4f60b2f1",
-    "runtime": "18",
-    "fn_name": "helloWorld",
-    "fn_zip_file": null,
-    "created_at": "2025-10-31T05:47:59.967Z",
-    "updated_at": null,
-    "update_count": 0,
-    "response_url": null,
-    "owner": "83fa2dcb-c285-4ca4-8ad7-3c5867781efc"
-  }
-]
 
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
 
-export const columns = [
+export const columns: ColumnDef<GetFunctionPayload>[] = [
   // {
   //   id: "select",
   //   header: ({ table }) => (
@@ -156,7 +134,7 @@ export const columns = [
   },
 ]
 
-export function DataTableDemo({ tableData }: { tableData: any }) {
+export function DataTableDemo({ tableData }: { tableData: GetFunctionPayload[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

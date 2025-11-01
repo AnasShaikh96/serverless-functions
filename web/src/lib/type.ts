@@ -20,7 +20,12 @@ export const createFunctionSchema = functionSchema.omit({
   update_count: true,
   usage: true,
   response_url: true,
+  fn_zip_file:true,
+  
 });
+
+export type GetFunctionPayload = z.infer<typeof functionSchema>;
+
 
 export type CreateFunctionPayload = z.infer<typeof createFunctionSchema>;
 
@@ -101,5 +106,3 @@ export type ResetPasswordResponse = {
   status: number;
   message: string;
 };
-
-
