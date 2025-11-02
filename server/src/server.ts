@@ -41,7 +41,7 @@ app.use("/hey", async (req, res) => {
   // Add table migrations query here and hit this route.
 
   // await AlterColumnFnName();
-  await AlterColumnFnFileZip();
+  // await AlterColumnFnFileZip();
   res.send(`Check health ${poolDeets} `);
 });
 

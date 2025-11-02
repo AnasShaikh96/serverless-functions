@@ -7,6 +7,7 @@ import {
   deleteFunctionByIdService,
   getAllFunctionsService,
   getFunctionByIdService,
+  updateFunctionByIdService,
 } from "./functionModel";
 import { CreateFunctionType } from "@/common/schema/function";
 import pool from "@/common/data/db";
@@ -124,19 +125,19 @@ export const updateFunctionHandler = catchAsync(
 
     const getfn = await getFunctionByIdService(fnId);
 
-
     // Updating object storage by name and userId to maintain a single file.
     const objectStorage = await handleObjectStorage(body.fn_zip_file, {
       name: getfn.fn_name,
       userId
     })
 
-    console.log("objectStorage", objectStorage)
+    const updatefn = await updateFunctionByIdService(fnId, {
+      fn_name: getfn.fn_name,
+      fn_zip_file: objectStorage
+    })
 
 
-    sendResponse(res, 200, "Updated Data Successfully", {
-      succes: true,
-    });
+    sendResponse(res, 200, "Updated Data Successfully", updatefn);
   }
 );
 
