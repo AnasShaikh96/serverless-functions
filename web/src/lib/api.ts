@@ -146,3 +146,11 @@ export async function getAllFunc() {
     method: "GET",
   });
 }
+
+
+
+export async function getFuncById(id: string) {
+  return request<any>(`/functions/get/${id}`, {
+    method: "GET",
+  });
+}

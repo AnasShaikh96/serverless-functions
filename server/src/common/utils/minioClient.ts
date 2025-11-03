@@ -97,3 +97,13 @@ export const deleteObject = async (userPath: string) => {
     throw Error(error ?? 'Error while deleting object');
   }
 }
+
+
+export const downloadObject = async (userPath: string, filePath: string) => {
+  try {
+    const obj = minioClient.fGetObject(bucket, userPath, filePath)
+    return obj
+  } catch (error) {
+    throw Error(error ?? 'Error while downloading object');
+  }
+}

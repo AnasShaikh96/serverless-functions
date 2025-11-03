@@ -13,6 +13,8 @@ export const functionSchema = z.object({
   usage: z.string().uuid(),
 });
 
+export type GetFunctionType = z.infer<typeof functionSchema>;
+
 export const createFunctionSchema = functionSchema.omit({
   id: true,
   created_at: true,

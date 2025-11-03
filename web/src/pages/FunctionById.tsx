@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import EditorValue from '@/components/editor-value'
 import ReadOnlyTerminal from '@/components/terminal'
-import { updateFunc } from '@/lib/api'
+import { getFuncById, updateFunc } from '@/lib/api'
 import { Route } from '@/routes/function.$functionId'
 
 const FunctionById = () => {
@@ -14,6 +14,30 @@ const FunctionById = () => {
 
   const [editorValue, setEditorValue] = useState<null | string>(null)
   const [responseError, setResponseError] = useState<string>('')
+
+
+  useEffect(() => {
+
+    const getPostEditorValue = async () => {
+
+      const id = functionId;
+
+      const res = await getFuncById(id);
+
+      console.log("res", res.data.fn_zip_file);
+
+      setEditorValue(res.data.fn_zip_file)
+
+    }
+
+
+    getPostEditorValue()
+  }, [])
+
+
+
+
+
 
   useEffect(() => {
     // const user = localStorage.getItem('user')
@@ -67,7 +91,7 @@ const FunctionById = () => {
             </div>
           </div>
           <div className='h-[500px] bg-red-200 w-full max-w-[700px] border-2 border-red-300 '>
-            <EditorValue updateEditorValue={updateEditorValue} />
+            <EditorValue updateEditorValue={updateEditorValue} defaultValue={editorValue} />
           </div>
           <div className='w-full ' >
             <h3>Output</h3>

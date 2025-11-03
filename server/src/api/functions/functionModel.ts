@@ -23,9 +23,8 @@ export const createFunctionService = async (body: CreateFunctionType) => {
 
 export const getFunctionByIdService = async (functionId: string) => {
   try {
-    // const functionData = await pool.query(`SELECT * FROM functions WHERE id='${functionId}'`)
     const functionData = await pool.query(
-      "SELECT * FROM functions WHERE id=$1::uuid",
+      "SELECT * FROM functions WHERE id=$1",
       [functionId]
     );
     return functionData.rows[0];

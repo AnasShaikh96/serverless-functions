@@ -1,9 +1,10 @@
 import fs, { existsSync } from "fs";
-import { writeFile, unlink } from "fs/promises";
+import { writeFile, unlink, readFile } from "fs/promises";
 import { v4 as uuid4 } from "uuid";
 import {
     bucketExists,
     deleteObject,
+    downloadObject,
     makeBucket,
     objectExists,
     putObject,
@@ -14,13 +15,13 @@ export interface IObjectMetaData {
     name: string,
     count?: number,
     userId: string,
-    fnId?: string;
+    fnPath?: string;
 }
 
 
 export const handleObjectStorage = async (filecontent: string, metadata: IObjectMetaData) => {
 
-    const { name, count, userId, fnId } = metadata;
+    const { name, count, userId } = metadata;
 
     const foldername = `./src/temp/${userId}`;
 
@@ -38,7 +39,9 @@ export const handleObjectStorage = async (filecontent: string, metadata: IObject
 
         // Puts Object in Minio Object Storage
         await putObject(objectPath, filePath)
-            .then(() => unlink(filePath)) // removes the temporary instance
+
+        // Removed because we need to read temporary File for GET ops
+        // .then(() => unlink(filePath)) // removes the temporary instance
 
         return objectPath;
 
@@ -56,5 +59,35 @@ export const handleObjectStorage = async (filecontent: string, metadata: IObject
         }
 
         throw new ApiError(500, 'Internal Server Error: Error occurred while writing file.')
+    }
+}
+
+
+export const getObjectStorage = async (metadata: IObjectMetaData) => {
+    const { name, userId, fnPath } = metadata;
+
+    const foldername = `./src/temp/${userId}`;
+
+    const filename = `${name}.js`;
+    const filePath = foldername + `/${filename}`;
+
+    if (fs.existsSync(filePath)) {
+        const tempFileContent = await readFile(filePath, { encoding: 'utf8' });
+        return tempFileContent;
+    }
+
+
+    console.log('fn path', fnPath)
+    if (!fnPath) throw new ApiError(404, "Fn Path does not Exists"!);
+
+    const checkStoredFile = await objectExists(fnPath);
+
+    if (!checkStoredFile) throw new ApiError(404, 'Fn File does not exixts in storage!')
+
+    await downloadObject(fnPath, filePath);
+
+    if (fs.existsSync(filePath)) {
+        const tempFileContent = await readFile(filePath, { encoding: 'utf8' });
+        return tempFileContent;
     }
 }
