@@ -1,16 +1,14 @@
-import DashboardLayout from '@/layouts/DashboardLayout'
 import ProtectedRoute from '@/components/ProtectedRoute'
-import GetAllFunctions from '@/pages/GetAllFunctions'
+import DashboardLayout from '@/layouts/DashboardLayout';
+import FunctionById from '@/pages/FunctionById'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/function')({
+export const Route = createFileRoute('/function/$functionId')({
   component: () => (
     <DashboardLayout>
       <ProtectedRoute>
-        <GetAllFunctions />
+        <FunctionById />
       </ProtectedRoute>
     </DashboardLayout>
   ),
 })
-
-

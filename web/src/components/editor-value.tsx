@@ -2,7 +2,7 @@ import { Editor, type Monaco } from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
 import { useRef } from 'react'
 
-const EditorValue = ({ updateEditorValue }: { updateEditorValue: (data: string) => void }) => {
+const EditorValue = ({ updateEditorValue, defaultValue }: { updateEditorValue: (data: string) => void, defaultValue: string | null }) => {
 	const editorRef = useRef<null | editor.IStandaloneCodeEditor>(null);
 
 
@@ -39,7 +39,7 @@ const EditorValue = ({ updateEditorValue }: { updateEditorValue: (data: string) 
 			<Editor
 				// height="90vh"
 				defaultLanguage="javascript"
-				defaultValue="// some comment"
+				defaultValue={defaultValue ?? "// some comment"}
 				onMount={handleEditorDidMount}
 				beforeMount={handleEditorWillMount}
 				onValidate={handleEditorValidation}

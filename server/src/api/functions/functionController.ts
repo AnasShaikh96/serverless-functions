@@ -7,11 +7,12 @@ import {
   deleteFunctionByIdService,
   getAllFunctionsService,
   getFunctionByIdService,
+  updateFunctionByIdService,
 } from "./functionModel";
-import { CreateFunctionType } from "@/common/schema/function";
+import { CreateFunctionType, GetFunctionType } from "@/common/schema/function";
 import pool from "@/common/data/db";
 import { User } from "@/common/schema/user";
-import { handleObjectStorage } from "@/common/utils/objectStorage";
+import { getObjectStorage, handleObjectStorage } from "@/common/utils/objectStorage";
 
 // const dummyId = "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c";
 const dummyFnId = "b1439dce-0ae6-4ae3-b78d-07027a3728e0";
@@ -57,11 +58,8 @@ const storeFunctionBucket = async (
 
 export const createFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
-    // const userId: User["id"] = req.user.id;
-    const body = req.body as CreateFunctionType;
 
-    // const storedObject = await handleObjectStorage(userId, body.fn_zip_file)
-    // console.log("storedObject", storedObject)
+    const body = req.body as CreateFunctionType;
 
     // Function would be created first then we add storage.
     const data = await createFunctionService({ ...body })
@@ -95,9 +93,25 @@ export const createFunctionHandler = catchAsync(
 
 export const getFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
-    const fnId = dummyFnId; // get fn id from req params;s
-    const functionData = await getFunctionByIdService(fnId);
-    sendResponse(res, 200, "Fetched Data Successfully", functionData);
+
+    const userId = req.user.id
+    const fnId = req.params.id; // get fn id from req params;s
+    const functionData: GetFunctionType = await getFunctionByIdService(fnId);
+
+    // check for temporary file
+    // if it exists in memory, read and send it
+    // if not, then download it in the temp storage from MinIO
+    // then read it and forward its content
+    const fileData = await getObjectStorage({
+      userId,
+      name: functionData.fn_name,
+      fnPath: functionData.fn_zip_file
+    });
+
+    sendResponse(res, 200, "Fetched Data Successfully", {
+      ...functionData,
+      fn_zip_file: fileData
+    });
   }
 );
 
@@ -116,10 +130,27 @@ export const getAllFunctionHandler = catchAsync(
 
 export const updateFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
-    const id = req.params.id;
-    sendResponse(res, 200, "Updated Data Successfully", {
-      succes: true,
-    });
+
+    const userId = req.user.id
+    const fnId = req.params.id
+
+    const body = req.body
+
+    const getfn = await getFunctionByIdService(fnId);
+
+    // Updating object storage by name and userId to maintain a single file.
+    const objectStorage = await handleObjectStorage(body.fn_zip_file, {
+      name: getfn.fn_name,
+      userId
+    })
+
+    const updatefn = await updateFunctionByIdService(fnId, {
+      fn_name: getfn.fn_name,
+      fn_zip_file: objectStorage
+    })
+
+
+    sendResponse(res, 200, "Updated Data Successfully", updatefn);
   }
 );
 

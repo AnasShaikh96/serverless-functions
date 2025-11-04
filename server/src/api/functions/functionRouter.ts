@@ -26,7 +26,7 @@ functionRouter.post("/create", verifyToken, validateRequest(createFunctionSchema
 
 functionRouter.get("/get/:id", verifyToken, getFunctionHandler);
 functionRouter.get("/getall", verifyToken, getAllFunctionHandler);
-functionRouter.patch("/update", verifyToken, updateFunctionHandler);
+functionRouter.patch("/update/:id", verifyToken, updateFunctionHandler);
 functionRouter.delete("/delete/:id", verifyToken, deleteFunctionHandler);
 
 export default functionRouter;

@@ -12,9 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SignUpRouteImport } from './routes/sign-up'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as LoginRouteImport } from './routes/login'
-import { Route as FunctionRouteImport } from './routes/function'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FunctionIndexRouteImport } from './routes/function.index'
+import { Route as FunctionCreateRouteImport } from './routes/function.create'
+import { Route as FunctionFunctionIdRouteImport } from './routes/function.$functionId'
 
 const SignUpRoute = SignUpRouteImport.update({
   id: '/sign-up',
@@ -31,11 +33,6 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const FunctionRoute = FunctionRouteImport.update({
-  id: '/function',
-  path: '/function',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
@@ -46,66 +43,95 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FunctionIndexRoute = FunctionIndexRouteImport.update({
+  id: '/function/',
+  path: '/function/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FunctionCreateRoute = FunctionCreateRouteImport.update({
+  id: '/function/create',
+  path: '/function/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FunctionFunctionIdRoute = FunctionFunctionIdRouteImport.update({
+  id: '/function/$functionId',
+  path: '/function/$functionId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/function': typeof FunctionRoute
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sign-up': typeof SignUpRoute
+  '/function/$functionId': typeof FunctionFunctionIdRoute
+  '/function/create': typeof FunctionCreateRoute
+  '/function': typeof FunctionIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/function': typeof FunctionRoute
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sign-up': typeof SignUpRoute
+  '/function/$functionId': typeof FunctionFunctionIdRoute
+  '/function/create': typeof FunctionCreateRoute
+  '/function': typeof FunctionIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/forgot-password': typeof ForgotPasswordRoute
-  '/function': typeof FunctionRoute
   '/login': typeof LoginRoute
   '/reset-password': typeof ResetPasswordRoute
   '/sign-up': typeof SignUpRoute
+  '/function/$functionId': typeof FunctionFunctionIdRoute
+  '/function/create': typeof FunctionCreateRoute
+  '/function/': typeof FunctionIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/forgot-password'
-    | '/function'
     | '/login'
     | '/reset-password'
     | '/sign-up'
+    | '/function/$functionId'
+    | '/function/create'
+    | '/function'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/forgot-password'
-    | '/function'
     | '/login'
     | '/reset-password'
     | '/sign-up'
+    | '/function/$functionId'
+    | '/function/create'
+    | '/function'
   id:
     | '__root__'
     | '/'
     | '/forgot-password'
-    | '/function'
     | '/login'
     | '/reset-password'
     | '/sign-up'
+    | '/function/$functionId'
+    | '/function/create'
+    | '/function/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
-  FunctionRoute: typeof FunctionRoute
   LoginRoute: typeof LoginRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SignUpRoute: typeof SignUpRoute
+  FunctionFunctionIdRoute: typeof FunctionFunctionIdRoute
+  FunctionCreateRoute: typeof FunctionCreateRoute
+  FunctionIndexRoute: typeof FunctionIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -131,13 +157,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/function': {
-      id: '/function'
-      path: '/function'
-      fullPath: '/function'
-      preLoaderRoute: typeof FunctionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/forgot-password': {
       id: '/forgot-password'
       path: '/forgot-password'
@@ -152,16 +171,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/function/': {
+      id: '/function/'
+      path: '/function'
+      fullPath: '/function'
+      preLoaderRoute: typeof FunctionIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/function/create': {
+      id: '/function/create'
+      path: '/function/create'
+      fullPath: '/function/create'
+      preLoaderRoute: typeof FunctionCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/function/$functionId': {
+      id: '/function/$functionId'
+      path: '/function/$functionId'
+      fullPath: '/function/$functionId'
+      preLoaderRoute: typeof FunctionFunctionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
-  FunctionRoute: FunctionRoute,
   LoginRoute: LoginRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SignUpRoute: SignUpRoute,
+  FunctionFunctionIdRoute: FunctionFunctionIdRoute,
+  FunctionCreateRoute: FunctionCreateRoute,
+  FunctionIndexRoute: FunctionIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

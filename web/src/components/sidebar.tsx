@@ -36,7 +36,7 @@ const sidebarItems = [
 ]
 
 export function Sidebar({ isOpen, onClose, isMobile }: SidebarProps) {
-    const [isCollapsed, setIsCollapsed] = useState(false)
+    const [isCollapsed, setIsCollapsed] = useState(true)
 
     const toggleCollapsed = () => {
         setIsCollapsed(!isCollapsed)

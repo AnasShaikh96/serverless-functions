@@ -23,9 +23,8 @@ export const createFunctionService = async (body: CreateFunctionType) => {
 
 export const getFunctionByIdService = async (functionId: string) => {
   try {
-    // const functionData = await pool.query(`SELECT * FROM functions WHERE id='${functionId}'`)
     const functionData = await pool.query(
-      "SELECT * FROM functions WHERE id=$1::uuid",
+      "SELECT * FROM functions WHERE id=$1",
       [functionId]
     );
     return functionData.rows[0];
@@ -49,11 +48,17 @@ export const getAllFunctionsService = async (userId: string) => {
   }
 };
 
-export const updateFunctionByIdService = async (body: UpdateFunctionType) => {
+export const updateFunctionByIdService = async (id: string, body: UpdateFunctionType) => {
   try {
-    const functionData = await pool.query(``);
+
+    const { fn_name, fn_zip_file } = body;
+
+    const functionData = await pool.query(`UPDATE functions SET(fn_name, fn_zip_file) = ($1,$2) WHERE id=$3 RETURNING *`, [fn_name, fn_zip_file, id]);
+
+    return functionData.rows
   } catch (error) {
-    throw new ApiError(500, "Error while updating function by Id");
+    console.log(error)
+    throw new ApiError(500, error?.detail ?? "Error while updating function by Id");
   }
 };
 

@@ -128,7 +128,7 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
                                 <div className="text-2xl">
                                     {logo}
                                 </div>
-                                <span className="hidden font-bold text-xl sm:inline-block">yapper</span>
+                                <span className="hidden font-bold text-xl sm:inline-block">svls</span>
                             </button>
                         </div>
                     </div>
