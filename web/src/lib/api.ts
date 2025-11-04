@@ -154,3 +154,10 @@ export async function getFuncById(id: string) {
     method: "GET",
   });
 }
+
+
+export async function deleteFunc(id: string) {
+  return request<any>(`/functions/delete/${id}`, {
+    method: "DELETE",
+  })
+}

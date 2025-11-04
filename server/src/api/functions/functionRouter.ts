@@ -17,7 +17,7 @@ const functionRouter: Router = express.Router();
 
 
 // functionRouter.get('/create-table', createFunctionTable)
-functionRouter.post("/create", verifyToken, validateRequest(createFunctionSchema),verifyObjectStorage,  createFunctionHandler);
+functionRouter.post("/create", verifyToken, validateRequest(createFunctionSchema), verifyObjectStorage, createFunctionHandler);
 // node version
 // zip file
 // fn name

@@ -156,7 +156,7 @@ export const updateFunctionHandler = catchAsync(
 
 export const deleteFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
-    const fnId = dummyFnId;
+    const fnId = req.params.id;
 
     const deleteFnData = await deleteFunctionByIdService(fnId);
     sendResponse(res, 200, "Deleted Function", deleteFnData);
