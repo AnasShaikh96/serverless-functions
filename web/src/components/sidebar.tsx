@@ -24,15 +24,15 @@ const sidebarItems = [
     //     href: "/dashboard",
     // },
     {
-        title: "Notes",
+        title: "function",
         icon: FileText,
-        href: "/notes",
-    },
-    {
-        title: "Editor",
-        icon: PenBoxIcon,
-        href: "/editor",
-    },
+        href: "/function",
+    }
+    // {
+    //     title: "Editor",
+    //     icon: PenBoxIcon,
+    //     href: "/editor",
+    // },
 ]
 
 export function Sidebar({ isOpen, onClose, isMobile }: SidebarProps) {

@@ -135,8 +135,12 @@ export const initUserFunction = async (req: Request, res: Response) => {
     // run normnal npm install
     await execa('npm', ['i'], { cwd: projectDir });
 
-    // install nodemon 
-    await execa('npm', ['i', "--save-dev", "nodemon"], { cwd: projectDir });
+    // install nodemon as dependency
+    await execa('npm', ['i', "nodemon"], { cwd: projectDir });
+    console.log('nodemon installed')
+
+    //  // install nodemon as dev dependenci
+    //  await execa('npm', ['i', "nodemon"], { cwd: projectDir });
 
 
     const dockerCommand = 'docker compose up --build';  // Example command

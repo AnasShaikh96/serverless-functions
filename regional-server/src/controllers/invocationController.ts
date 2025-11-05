@@ -32,7 +32,9 @@ export const jobPoller = (req: Request, res: Response) => {
     const nextJob = jobQueue.shift();
     res.send(nextJob);
   } else {
-    res.status(204).send(); // No Job in queue
+    
+    // res.status(204).send(); // No Job in queue
+    res.status(204).json('he'); // No Job in queue
   }
 };
 
