@@ -9,6 +9,7 @@ import { execa } from "execa"
 
 import { dirname } from 'path';
 import { fileURLToPath } from "url";
+import { createEnv } from "../utils/createEnv";
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -98,19 +99,24 @@ export const initUserFunction = async (req: Request, res: Response) => {
 
   const { owner, fn_name, fn_zip_file, runtime } = req.body;
 
-  console.log("req.body", req.body)
+  // console.log("req.body", req.body)
   const createDir = `./src/function-buckets/${owner}/${fn_name}`;
 
 
+
+
+
   const projectDir = path.join(__dirname, createDir)
-
-
   const dockerFiletext = makeDockerFile(runtime);
+  const envContent = createEnv('http://localhost:4342/api/v1', owner, fn_name)
+
+  const indexFileSource = path.join(__dirname, '../utils/createIndexFile.ts');
+  const indexFileDestination = path.join(projectDir, 'index.js');
 
   const files = [
     { name: "Dockerfile", content: dockerFiletext },
     { name: "compose.yaml", content: composeText },
-    { name: 'index.js', content: '// init' }
+    { name: ".env", content: envContent }
   ]
 
   try {
@@ -128,6 +134,10 @@ export const initUserFunction = async (req: Request, res: Response) => {
     }
 
 
+    // copy index.js file template
+    await execa('cp', [indexFileSource, indexFileDestination])
+
+
     await execa('npm', ['init', '-y'], { cwd: projectDir });
     console.log('npm init completed');
 
@@ -136,8 +146,8 @@ export const initUserFunction = async (req: Request, res: Response) => {
     await execa('npm', ['i'], { cwd: projectDir });
 
     // install nodemon as dependency
-    await execa('npm', ['i', "nodemon"], { cwd: projectDir });
-    console.log('nodemon installed')
+    await execa('npm', ['i', "nodemon", "axios", "dotenv"], { cwd: projectDir });
+    console.log('dependency installed')
 
     //  // install nodemon as dev dependenci
     //  await execa('npm', ['i', "nodemon"], { cwd: projectDir });
