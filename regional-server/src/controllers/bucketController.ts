@@ -108,7 +108,14 @@ export const initUserFunction = async (req: Request, res: Response) => {
 
   const projectDir = path.join(__dirname, createDir)
   const dockerFiletext = makeDockerFile(runtime);
-  const envContent = createEnv('http://localhost:4342/api/v1', owner, fn_name)
+
+
+  // const envContent = createEnv('http://localhost:4342/api/v1', owner, fn_name)
+
+
+  // update base url to because docker use bridge network to read ports
+  // of host machine which is managed by itself 
+  const envContent = createEnv('http://host.docker.internal:4342/api/v1', owner, fn_name)
 
   const indexFileSource = path.join(__dirname, '../utils/createIndexFile.ts');
   const indexFileDestination = path.join(projectDir, 'index.js');
@@ -151,7 +158,6 @@ export const initUserFunction = async (req: Request, res: Response) => {
 
     //  // install nodemon as dev dependenci
     //  await execa('npm', ['i', "nodemon"], { cwd: projectDir });
-
 
     const dockerCommand = 'docker compose up --build';  // Example command
     const { stdout } = await execa(dockerCommand, { shell: true, cwd: projectDir });
