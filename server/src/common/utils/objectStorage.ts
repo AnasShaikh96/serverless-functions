@@ -77,7 +77,7 @@ export const getObjectStorage = async (metadata: IObjectMetaData) => {
     }
 
 
-    console.log('fn path', fnPath)
+    console.log('fn path on 80', fnPath)
     if (!fnPath) throw new ApiError(404, "Fn Path does not Exists"!);
 
     const checkStoredFile = await objectExists(fnPath);
