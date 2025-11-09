@@ -1,6 +1,6 @@
-import fs, { existsSync } from "fs";
+import fs from "fs";
 import { writeFile, unlink, readFile } from "fs/promises";
-import { v4 as uuid4 } from "uuid";
+// import { v4 as uuid4 } from "uuid";
 import {
     bucketExists,
     deleteObject,
