@@ -197,3 +197,87 @@ export const initUserFunction = async (req: Request, res: Response) => {
     success: true
   })
 }
+
+
+export const getUserFunction = async (req: Request, res: Response) => {
+  const { owner, fn_name, fn_zip_file, runtime } = req.body;
+
+  const fnDir = `./src/controllers/src/function-buckets/${owner}/${fn_name}`;
+
+
+  // in the remote container, check if it is running
+  // halt the function, cleanup from docker
+  // delete the directory with everything
+  // send ok response..
+
+  console.log(fnDir, fs.existsSync(fnDir))
+
+  if (fs.existsSync(fnDir)) {
+    res.status(200).json({
+      success: true,
+      message: "Fucntion directory exists!"
+    })
+  } else {
+    res.status(404).json({
+      success: false,
+      message: "Function directory not found or Deleted!"
+    })
+  }
+
+
+
+
+}
+
+
+export const deleteUserFunction = async (req: Request, res: Response) => {
+  const fnName = req.params.fnName;
+  const userId = req.params.owner;
+  // const fnDir = `./src/function-buckets/${userId}/${fnName}`;
+  const fnDir = `./src/controllers/src/function-buckets/${userId}/${fnName}`;
+
+  let fnDownStatus = false;
+
+  try {
+
+
+    const dockerCommand = `docker ps --filter "ancestor=${fnName.toLowerCase()}-server" --format '{{.State}}'`
+    const { stdout } = await execa(dockerCommand, { shell: true })
+
+    // if length is greater than 0, image is running
+    // run docker compose down then.
+    if (stdout.length > 0) {
+
+      // const dockerDownCommand = `docker compose down`
+      const postDockerDown = await execa('docker', ['compose', 'down'], { cwd: fnDir });
+      console.log("docker container halter", postDockerDown)
+
+    }
+
+
+    fnDownStatus = true
+
+    console.log("nothing happened cause image is already down")
+
+    // console.log("isFnRunning", dockerCommand, isFnRunning.stdout.length)
+
+
+  } catch (error) {
+
+    fnDownStatus = false
+    console.log('error occured in deleteUserFunction in bucketcontroller', error)
+  }
+
+
+  if(fnDownStatus){
+
+    
+  }
+
+
+  res.status(200).json({
+    success: true,
+    message: 'function deleted successfully'
+  })
+
+}
