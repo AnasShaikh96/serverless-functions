@@ -15,44 +15,63 @@ import { User } from "@/common/schema/user";
 import { getObjectStorage, handleObjectStorage } from "@/common/utils/objectStorage";
 
 // const dummyId = "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c";
-const dummyFnId = "b1439dce-0ae6-4ae3-b78d-07027a3728e0";
+// const dummyFnId = "b1439dce-0ae6-4ae3-b78d-07027a3728e0";
 
-const checkUserFunctionBucket = async (id: string) => {
-  const userExits = await fetch(
-    `http://localhost:1001/api/v1/bucket/user-bucket/${id}`
+// const checkUserFunctionBucket = async (id: string) => {
+//   const userExits = await fetch(
+//     `http://localhost:1001/api/v1/bucket/user-bucket/${id}`
+//   );
+//   return userExits;
+// };
+
+// const storeFunctionBucket = async (
+//   id: string,
+//   file: string,
+//   runtime: string
+// ) => {
+//   try {
+//     const storeFunction = await fetch(
+//       `http://localhost:1001/api/v1/bucket/store-function`,
+//       {
+//         method: "POST",
+//         headers: {
+//           Accept: "application/json",
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({
+//           path: file,
+//           id: id,
+//           version: runtime,
+//         }),
+//       }
+//     );
+
+//     return storeFunction;
+//   } catch (error) {
+//     throw new Error("Could not fetch User Bucket!");
+//   }
+// };
+
+
+
+const initiateFunction = async (data: GetFunctionType) => {
+
+  const init = await fetch(
+    `http://localhost:4342/api/v1/bucket/init-function`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
   );
-  return userExits;
-};
 
-const storeFunctionBucket = async (
-  id: string,
-  file: string,
-  runtime: string
-) => {
-  try {
-    const storeFunction = await fetch(
-      `http://localhost:1001/api/v1/bucket/store-function`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          path: file,
-          id: id,
-          version: runtime,
-        }),
-      }
-    );
-
-    return storeFunction;
-  } catch (error) {
-    throw new Error("Could not fetch User Bucket!");
-  }
-};
+  return init;
 
 
+}
 
 
 
@@ -63,7 +82,13 @@ export const createFunctionHandler = catchAsync(
 
     // Function would be created first then we add storage.
     const data = await createFunctionService({ ...body })
-    sendResponse(res, 200, "Function created successfully!", data);
+
+    // booting a docker container on create
+    const functionInstance = await initiateFunction(data);
+    console.log("functionInstance", functionInstance)
+
+
+    sendResponse(res, 200, "Function created & initialized successfully!", data);
   }
 );
 
@@ -156,7 +181,7 @@ export const updateFunctionHandler = catchAsync(
 
 export const deleteFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
-    const fnId = dummyFnId;
+    const fnId = req.params.id;
 
     const deleteFnData = await deleteFunctionByIdService(fnId);
     sendResponse(res, 200, "Deleted Function", deleteFnData);

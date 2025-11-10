@@ -1,9 +1,19 @@
+import path from "path";
 import { composeText } from "../utils/composeText";
 import extractArchive from "../utils/extractArchieve";
 import { makeDockerFile } from "../utils/makeDockerfile";
 import { exec } from "child_process";
 import type { Request, Response } from "express";
 import fs from "fs";
+import { execa } from "execa"
+
+import { dirname } from 'path';
+import { fileURLToPath } from "url";
+import { createEnv } from "../utils/createEnv";
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export const getUserBucket = async (req: Request, res: Response) => {
   const fullUrl = req.protocol + "://" + req.get("host") + req.originalUrl;
@@ -39,11 +49,11 @@ export const storeUserFunction = async (req: Request, res: Response) => {
 
   const createDir = `./src/function-buckets/${id}`;
 
-  const pathUrl = await extractArchive(
-    path.fileUrl,
-    createDir,
-    "helloDynamic.js"
-  );
+  // const pathUrl = await extractArchive(
+  //   path.fileUrl,
+  //   createDir,
+  //   "helloDynamic.js"
+  // );
 
   // const dockerFiletext = makeDockerFile(version);
 
@@ -76,9 +86,114 @@ export const storeUserFunction = async (req: Request, res: Response) => {
   const fullUrl = req.protocol + "://" + req.get("host");
 
   res.status(200).json({
-    functionUrl: `${fullUrl}/invoke-function/${id}${pathUrl?.replace(
-      createDir,
-      ""
-    )}`,
+    // functionUrl: `${fullUrl}/invoke-function/${id}${pathUrl?.replace(
+    //   createDir,
+    //   ""
+    // )}`,
   });
 };
+
+
+export const initUserFunction = async (req: Request, res: Response) => {
+
+
+  const { owner, fn_name, fn_zip_file, runtime } = req.body;
+
+  // console.log("req.body", req.body)
+  const createDir = `./src/function-buckets/${owner}/${fn_name}`;
+
+
+
+
+
+  const projectDir = path.join(__dirname, createDir)
+  const dockerFiletext = makeDockerFile(runtime);
+
+
+  // const envContent = createEnv('http://localhost:4342/api/v1', owner, fn_name)
+
+
+  // update base url to because docker use bridge network to read ports
+  // of host machine which is managed by itself 
+  const envContent = createEnv('http://host.docker.internal:4342/api/v1', owner, fn_name)
+
+  const indexFileSource = path.join(__dirname, '../utils/createIndexFile.ts');
+  const indexFileDestination = path.join(projectDir, 'index.js');
+
+  const files = [
+    { name: "Dockerfile", content: dockerFiletext },
+    { name: "compose.yaml", content: composeText },
+    { name: ".env", content: envContent }
+  ]
+
+  try {
+
+    await execa('mkdir', ['-p', projectDir]);
+
+    for (const file of files) {
+      const filePath = path.join(projectDir, file.name);
+      await fs.writeFile(filePath, file.content, (err) => {
+        if (err) {
+          console.log(`error in ${file.name}`)
+        }
+      });
+      console.log('Created file:', filePath);
+    }
+
+
+    // copy index.js file template
+    await execa('cp', [indexFileSource, indexFileDestination])
+
+
+    await execa('npm', ['init', '-y'], { cwd: projectDir });
+    console.log('npm init completed');
+
+
+    // run normnal npm install
+    await execa('npm', ['i'], { cwd: projectDir });
+
+    // install nodemon as dependency
+    await execa('npm', ['i', "nodemon", "axios", "dotenv"], { cwd: projectDir });
+    console.log('dependency installed')
+
+    //  // install nodemon as dev dependenci
+    //  await execa('npm', ['i', "nodemon"], { cwd: projectDir });
+
+    const dockerCommand = 'docker compose up --build';  // Example command
+    const { stdout } = await execa(dockerCommand, { shell: true, cwd: projectDir });
+    console.log('Docker command output:', stdout);
+
+
+  } catch (error) {
+    console.log("error while setting up project", error)
+  }
+
+  // if (!fs.existsSync(createDir)) {
+  //   fs.mkdirSync(createDir, { recursive: true })
+  // }
+
+
+  // fs.writeFile(createDir + "/Dockerfile", dockerFiletext, (err) => {
+  //   if (err) {
+  //     console.log("error while creating Dockerfile", err);
+  //   }
+  // });
+
+  // fs.writeFile(createDir + "/compose.yaml", composeText, (err) => {
+  //   if (err) {
+  //     console.log("error while creating compose file", err);
+  //   }
+
+  // });
+
+  // fs.writeFile(createDir + "/index.js", "// init", (err) => {
+  //   if (err) {
+  //     console.log("err while creating init file")
+  //   }
+  // })
+
+
+  res.status(200).json({
+    success: true
+  })
+}

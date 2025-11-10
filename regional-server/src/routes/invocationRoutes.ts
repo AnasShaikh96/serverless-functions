@@ -13,4 +13,8 @@ router.get("/next", jobPoller);
 router.post("/response", getWorkerResponse);
 router.post("/error", getWorkerError);
 
+router.get("/", async (req, res) => {
+  res.status(200).send('invocation ok')
+})
+
 export default router;

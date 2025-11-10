@@ -6,69 +6,33 @@ import { Route } from '@/routes/function.$functionId'
 
 const FunctionById = () => {
 
-
   const { functionId } = Route.useParams()
-
-  console.log("functionId sss", functionId)
-
 
   const [editorValue, setEditorValue] = useState<null | string>(null)
   const [responseError, setResponseError] = useState<string>('')
+  const [fnName, setFnName] = useState("")
 
 
   useEffect(() => {
 
     const getPostEditorValue = async () => {
+      const res = await getFuncById(functionId);
 
-      const id = functionId;
-
-      const res = await getFuncById(id);
-
-      console.log("res", res.data.fn_zip_file);
-
+      setFnName(res.data.fn_name)
       setEditorValue(res.data.fn_zip_file)
-
     }
-
 
     getPostEditorValue()
   }, [])
 
 
+  const updateEditorValue = async (data: any) => {
+    const res = await updateFunc(functionId, {
+      fn_zip_file: data,
+    })
 
-
-
-
-  useEffect(() => {
-    // const user = localStorage.getItem('user')
-
-    const postEditorValue = async () => {
-
-      const id = functionId // home
-      // let id = "ddf73c34-515d-4d30-86ee-cb64e5d47222"
-
-
-      const res = await updateFunc(id, {
-        // runtime: '18',
-        // fn_name: 'helloWorldnew',
-        fn_zip_file: editorValue,
-        // owner: user
-      })
-
-      // console.log("asdasd", res)
-    }
-
-    if (editorValue !== null) {
-      postEditorValue();
-    }
-
-  }, [editorValue])
-
-
-
-
-  const updateEditorValue = (data: any) => {
-    setEditorValue(data)
+    console.log(res);
+    return res;
   }
 
   return (
@@ -76,7 +40,7 @@ const FunctionById = () => {
 
       <main className='p-2'>
         <div>
-          <h2>Function Name</h2>
+          <h2>{fnName}</h2>
 
         </div>
         <div className='flex mt-4' >

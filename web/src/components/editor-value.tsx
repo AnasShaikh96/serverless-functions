@@ -1,10 +1,16 @@
 import { Editor, type Monaco } from '@monaco-editor/react';
 import type { editor } from 'monaco-editor';
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 const EditorValue = ({ updateEditorValue, defaultValue }: { updateEditorValue: (data: string) => void, defaultValue: string | null }) => {
 	const editorRef = useRef<null | editor.IStandaloneCodeEditor>(null);
 
+
+
+
+	useEffect(() => {
+		console.log('default value')
+	}, [defaultValue])
 
 
 	function handleEditorValidation(markers: editor.IMarker[]) {

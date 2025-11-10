@@ -34,6 +34,7 @@ import {
 import { convertDate } from "@/lib/utils"
 import { Link } from "@tanstack/react-router"
 import { GetFunctionPayload } from "@/lib/type"
+import { deleteFunc } from "@/lib/api"
 
 
 
@@ -103,7 +104,12 @@ export const columns: ColumnDef<GetFunctionPayload>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
+      const payment = row.original;
+
+      const handleDelete = async (id: string) => {
+        const res = await deleteFunc(id);
+        return res
+      }
 
       return (
         <DropdownMenu>
@@ -115,16 +121,18 @@ export const columns: ColumnDef<GetFunctionPayload>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {/* <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem> */}
+
             {/* <DropdownMenuSeparator /> */}
             <DropdownMenuItem>
               <Link to={`/function/$functionId`} params={{ functionId: payment.id }} >
                 View function
               </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="cursor-pointer "
+              onClick={() => handleDelete(payment.id)}
+            >
+              <span className="text-red-500 hover:text-red-400"> Delete</span>
             </DropdownMenuItem>
             {/* <DropdownMenuItem>View payment details</DropdownMenuItem> */}
           </DropdownMenuContent>

@@ -1,6 +1,6 @@
-import fs, { existsSync } from "fs";
+import fs from "fs";
 import { writeFile, unlink, readFile } from "fs/promises";
-import { v4 as uuid4 } from "uuid";
+// import { v4 as uuid4 } from "uuid";
 import {
     bucketExists,
     deleteObject,
@@ -77,7 +77,7 @@ export const getObjectStorage = async (metadata: IObjectMetaData) => {
     }
 
 
-    console.log('fn path', fnPath)
+    console.log('fn path on 80', fnPath)
     if (!fnPath) throw new ApiError(404, "Fn Path does not Exists"!);
 
     const checkStoredFile = await objectExists(fnPath);
