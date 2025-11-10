@@ -91,3 +91,25 @@ export const getObjectStorage = async (metadata: IObjectMetaData) => {
         return tempFileContent;
     }
 }
+
+
+export const deleteObjectStorage = async (metadata: IObjectMetaData) => {
+    const { name, userId, fnPath } = metadata;
+
+    const foldername = `./src/temp/${userId}`;
+    const filename = `${name}.js`;
+    const filePath = foldername + `/${filename}`;
+
+    if (fs.existsSync(filePath)) {
+        fs.rm(filePath, (err) => {
+            if (err) {
+                console.log("error occured in deleteObjectStorage fn", err)
+            }
+        })
+    }
+
+    if (typeof fnPath === 'string') {
+        await deleteObject(fnPath)
+    }
+
+}

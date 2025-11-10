@@ -12,7 +12,7 @@ import {
 import { CreateFunctionType, GetFunctionType } from "@/common/schema/function";
 import pool from "@/common/data/db";
 import { User } from "@/common/schema/user";
-import { getObjectStorage, handleObjectStorage } from "@/common/utils/objectStorage";
+import { deleteObjectStorage, getObjectStorage, handleObjectStorage } from "@/common/utils/objectStorage";
 import { deleteObject } from "@/common/utils/minioClient";
 import { StatusCodes } from "http-status-codes";
 
@@ -240,16 +240,21 @@ export const deleteFunctionHandler = catchAsync(
 
 
 
-    if (functionData.fn_zip_file !== null) {
-      // await deleteObject(functionData.fn_zip_file)
-    }
+    await deleteObjectStorage({ name: functionData.fn_name, userId: functionData.owner, fnPath: functionData.fn_zip_file })
+
+    // if (functionData.fn_zip_file !== null) {
+    //   console.log('zip file does exists')
+
+    //   await deleteObject(functionData.fn_zip_file)
+    // }
+
 
 
     // delete the fn instance from obj storage
     // delete the fn from db.
 
 
-    // const deleteFnData = await deleteFunctionByIdService(fnId);
-    sendResponse(res, 200, "Deleted Function", functionData);
+    const deleteFnData = await deleteFunctionByIdService(fnId);
+    sendResponse(res, 200, "Deleted Function", deleteFnData);
   }
 );

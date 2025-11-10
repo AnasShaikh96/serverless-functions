@@ -269,9 +269,13 @@ export const deleteUserFunction = async (req: Request, res: Response) => {
   }
 
 
-  if(fnDownStatus){
+  if (fnDownStatus) {
+    fs.rm(fnDir, { recursive: true }, (err) => {
+      if (err) {
+        console.log('err occured while delete files', err)
+      }
+    })
 
-    
   }
 
 
