@@ -18,6 +18,7 @@ async function poll() {
     try {
         const res = await axios.get(`${BASE_URL}/invocation/next`);
         if (res.status === 204) {
+            console.log("polling line no 21")
             // No job, wait & poll again
             await new Promise((r) => setTimeout(r, 2000));
             return poll();
@@ -28,8 +29,12 @@ async function poll() {
         const jobPayload = job.payload
 
 
+        console.log("job", job)
+
+
         if (jobPayload.fnId !== owner || jobPayload.fnName !== functionName) {
             // No job, wait & poll again
+            console.log("polling line no 34")
             await new Promise((r) => setTimeout(r, 2000));
             return poll();
         }
@@ -48,6 +53,7 @@ async function poll() {
             console.log("Sent error response");
         }
 
+        console.log("polling line no 53")
         // Immediately continue polling
         poll();
     } catch (err) {

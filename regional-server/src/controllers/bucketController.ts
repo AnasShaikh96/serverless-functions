@@ -159,39 +159,19 @@ export const initUserFunction = async (req: Request, res: Response) => {
     //  // install nodemon as dev dependenci
     //  await execa('npm', ['i', "nodemon"], { cwd: projectDir });
 
-    const dockerCommand = 'docker compose up --build';  // Example command
-    const { stdout } = await execa(dockerCommand, { shell: true, cwd: projectDir });
-    console.log('Docker command output:', stdout);
+    // const dockerCommand = 'docker compose up --build';  // Example command
+
+    console.log("above docker", projectDir)
+
+    const dockExecute = await execa("docker", ["compose", "up", "--build"], { cwd: projectDir, stderr: "inherit", stdout: "inherit" });
+
+    // console.log("Docker command error:", stderr)
+    console.log('Docker command output:', dockExecute);
 
 
   } catch (error) {
     console.log("error while setting up project", error)
   }
-
-  // if (!fs.existsSync(createDir)) {
-  //   fs.mkdirSync(createDir, { recursive: true })
-  // }
-
-
-  // fs.writeFile(createDir + "/Dockerfile", dockerFiletext, (err) => {
-  //   if (err) {
-  //     console.log("error while creating Dockerfile", err);
-  //   }
-  // });
-
-  // fs.writeFile(createDir + "/compose.yaml", composeText, (err) => {
-  //   if (err) {
-  //     console.log("error while creating compose file", err);
-  //   }
-
-  // });
-
-  // fs.writeFile(createDir + "/index.js", "// init", (err) => {
-  //   if (err) {
-  //     console.log("err while creating init file")
-  //   }
-  // })
-
 
   res.status(200).json({
     success: true
