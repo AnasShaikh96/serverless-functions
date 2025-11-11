@@ -16,7 +16,7 @@ async function executeJob(job) {
 
 async function poll() {
     try {
-        const res = await axios.get(`${BASE_URL}/invocation/next`);
+        const res = await axios.get(`${BASE_URL}/invocation/next/${owner}/${functionName}`);
         if (res.status === 204) {
             console.log("polling line no 21")
             // No job, wait & poll again
@@ -24,12 +24,14 @@ async function poll() {
             return poll();
         }
 
+        console.log("got 200 response")
+
         const job = res.data;
         const jobId = job.id
         const jobPayload = job.payload
 
 
-        console.log("job", job)
+        console.log("job with payload", job)
 
 
         if (jobPayload.fnId !== owner || jobPayload.fnName !== functionName) {
