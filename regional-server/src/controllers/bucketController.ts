@@ -223,8 +223,10 @@ export const deleteUserFunction = async (req: Request, res: Response) => {
   try {
 
 
-    const dockerCommand = `docker ps --filter "ancestor=${fnName.toLowerCase()}-server" --format '{{.State}}'`
+    const dockerCommand = `docker ps --filter "ancestor=${fnName.toLowerCase()}-app" --format '{{.State}}'`
     const { stdout } = await execa(dockerCommand, { shell: true })
+
+    console.log("while delete func", stdout.length)
 
     // if length is greater than 0, image is running
     // run docker compose down then.
@@ -252,14 +254,12 @@ export const deleteUserFunction = async (req: Request, res: Response) => {
 
 
   if (fnDownStatus) {
-    fs.rm(fnDir, { recursive: true }, (err) => {
+    fs.rm(fnDir, { recursive: true, force: true }, (err) => {
       if (err) {
         console.log('err occured while delete files', err)
       }
     })
-
   }
-
 
   res.status(200).json({
     success: true,
