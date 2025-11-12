@@ -163,10 +163,11 @@ export const initUserFunction = async (req: Request, res: Response) => {
 
     console.log("above docker", projectDir)
 
-    const dockExecute = await execa("docker", ["compose", "up", "--build"], { cwd: projectDir, stderr: "inherit", stdout: "inherit" });
+    await execa("docker", ["compose", "up", "--build", "-d"], { cwd: projectDir, stdio: 'inherit' })
+    // .then((res) => console.log("docker executed", res));
 
     // console.log("Docker command error:", stderr)
-    console.log('Docker command output:', dockExecute);
+    // console.log('Docker command output:', dockExecute);
 
 
   } catch (error) {
