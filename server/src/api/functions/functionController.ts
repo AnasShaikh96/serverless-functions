@@ -12,7 +12,9 @@ import {
 import { CreateFunctionType, GetFunctionType } from "@/common/schema/function";
 import pool from "@/common/data/db";
 import { User } from "@/common/schema/user";
-import { getObjectStorage, handleObjectStorage } from "@/common/utils/objectStorage";
+import { deleteObjectStorage, getObjectStorage, handleObjectStorage } from "@/common/utils/objectStorage";
+import { deleteObject } from "@/common/utils/minioClient";
+import { StatusCodes } from "http-status-codes";
 
 // const dummyId = "a1d6b9a1-fc0a-43ab-81f6-d3c930b9a22c";
 // const dummyFnId = "b1439dce-0ae6-4ae3-b78d-07027a3728e0";
@@ -69,8 +71,38 @@ const initiateFunction = async (data: GetFunctionType) => {
   );
 
   return init;
+}
 
+const getInitFunction = async (data: GetFunctionType) => {
+  const init = await fetch(
+    `http://localhost:4342/api/v1/bucket/get-function`,
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
 
+  return init;
+}
+
+const deleteInitFunction = async (fnName: string, owner: string) => {
+  const init = await fetch(
+    `http://localhost:4342/api/v1/bucket/function/${owner}/${fnName}`,
+    {
+      method: "DELETE",
+      // headers: {
+      //   Accept: "application/json",
+      //   "Content-Type": "application/json",
+      // },
+      // body: JSON.stringify(data),
+    }
+  );
+
+  return init;
 }
 
 
@@ -182,6 +214,45 @@ export const updateFunctionHandler = catchAsync(
 export const deleteFunctionHandler = catchAsync(
   async (req: Request, res: Response) => {
     const fnId = req.params.id;
+
+
+    // get fn By id
+    // check whether file exists of that name
+    const functionData: GetFunctionType = await getFunctionByIdService(fnId);
+
+    // console.log("functionData", functionData.fn_zip_file)
+
+    if (!functionData.id) throw new ApiError(404, "Function does not exists or is already deleted!")
+
+
+    // check whether that function exists remote containers
+    const fnInstanceExists = await getInitFunction(functionData)
+
+    console.log(" fnInstanceExists", fnInstanceExists)
+
+    // if (fnInstanceExists.status !== StatusCodes.OK) throw new ApiError(404, "Function does not exists in remote container");
+
+    if (fnInstanceExists.status === StatusCodes.OK) {
+      const deletedFn = await deleteInitFunction(functionData.fn_name, functionData.owner);
+
+      console.log("deletedFn", deletedFn)
+    }
+
+
+
+    await deleteObjectStorage({ name: functionData.fn_name, userId: functionData.owner, fnPath: functionData.fn_zip_file })
+
+    // if (functionData.fn_zip_file !== null) {
+    //   console.log('zip file does exists')
+
+    //   await deleteObject(functionData.fn_zip_file)
+    // }
+
+
+
+    // delete the fn instance from obj storage
+    // delete the fn from db.
+
 
     const deleteFnData = await deleteFunctionByIdService(fnId);
     sendResponse(res, 200, "Deleted Function", deleteFnData);

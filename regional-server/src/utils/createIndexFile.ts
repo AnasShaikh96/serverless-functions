@@ -16,20 +16,27 @@ async function executeJob(job) {
 
 async function poll() {
     try {
-        const res = await axios.get(`${BASE_URL}/invocation/next`);
+        const res = await axios.get(`${BASE_URL}/invocation/next/${owner}/${functionName}`);
         if (res.status === 204) {
+            console.log("polling line no 21")
             // No job, wait & poll again
             await new Promise((r) => setTimeout(r, 2000));
             return poll();
         }
+
+        console.log("got 200 response")
 
         const job = res.data;
         const jobId = job.id
         const jobPayload = job.payload
 
 
+        console.log("job with payload", job)
+
+
         if (jobPayload.fnId !== owner || jobPayload.fnName !== functionName) {
             // No job, wait & poll again
+            console.log("polling line no 34")
             await new Promise((r) => setTimeout(r, 2000));
             return poll();
         }
@@ -48,6 +55,7 @@ async function poll() {
             console.log("Sent error response");
         }
 
+        console.log("polling line no 53")
         // Immediately continue polling
         poll();
     } catch (err) {
