@@ -1,8 +1,6 @@
 import path from "path";
 import { composeText } from "../utils/composeText";
-import extractArchive from "../utils/extractArchieve";
 import { makeDockerFile } from "../utils/makeDockerfile";
-import { exec } from "child_process";
 import type { Request, Response } from "express";
 import fs from "fs";
 import { execa } from "execa"
@@ -10,6 +8,7 @@ import { execa } from "execa"
 import { dirname } from 'path';
 import { fileURLToPath } from "url";
 import { createEnv } from "../utils/createEnv";
+import { createPackageFile } from "../utils/createPackageFile";
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -108,6 +107,7 @@ export const initUserFunction = async (req: Request, res: Response) => {
 
   const projectDir = path.join(__dirname, createDir)
   const dockerFiletext = makeDockerFile(runtime);
+  const packageText = createPackageFile(fn_name)
 
 
   // const envContent = createEnv('http://localhost:4342/api/v1', owner, fn_name)
@@ -123,7 +123,8 @@ export const initUserFunction = async (req: Request, res: Response) => {
   const files = [
     { name: "Dockerfile", content: dockerFiletext },
     { name: "compose.yaml", content: composeText },
-    { name: ".env", content: envContent }
+    { name: ".env", content: envContent },
+    { name: 'package.json', content: packageText }
   ]
 
   try {
@@ -145,16 +146,16 @@ export const initUserFunction = async (req: Request, res: Response) => {
     await execa('cp', [indexFileSource, indexFileDestination])
 
 
-    await execa('npm', ['init', '-y'], { cwd: projectDir });
-    console.log('npm init completed');
+    // await execa('npm', ['init', '-y'], { cwd: projectDir });
+    // console.log('npm init completed');
 
 
     // run normnal npm install
     await execa('npm', ['i'], { cwd: projectDir });
 
     // install nodemon as dependency
-    await execa('npm', ['i', "nodemon", "axios", "dotenv"], { cwd: projectDir });
-    console.log('dependency installed')
+    // await execa('npm', ['i', "nodemon", "axios", "dotenv"], { cwd: projectDir });
+    // console.log('dependency installed')
 
     //  // install nodemon as dev dependenci
     //  await execa('npm', ['i', "nodemon"], { cwd: projectDir });
