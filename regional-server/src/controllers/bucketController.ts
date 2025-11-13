@@ -162,14 +162,9 @@ export const initUserFunction = async (req: Request, res: Response) => {
 
     // const dockerCommand = 'docker compose up --build';  // Example command
 
-    console.log("above docker", projectDir)
+    // console.log("above docker", projectDir)
 
     await execa("docker", ["compose", "up", "--build", "-d"], { cwd: projectDir, stdio: 'inherit' })
-    // .then((res) => console.log("docker executed", res));
-
-    // console.log("Docker command error:", stderr)
-    // console.log('Docker command output:', dockExecute);
-
 
   } catch (error) {
     console.log("error while setting up project", error)
