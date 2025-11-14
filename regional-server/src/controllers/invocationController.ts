@@ -108,3 +108,19 @@ export const getWorkerError = async (req: Request, res: Response) => {
     message: "Error from WorkerError"
   });
 };
+
+
+export const getWorkerStatus = async (req: Request, res: Response) => {
+  const ownerId = req.params.id
+  const fnName = req.params.fn
+
+  const fnDir = `./src/controllers/src/function-buckets/${ownerId}/${fnName}`;
+
+  try {
+
+  } catch (error) {
+
+  }
+
+
+}
