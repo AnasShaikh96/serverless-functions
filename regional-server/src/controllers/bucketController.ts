@@ -1,8 +1,6 @@
 import path from "path";
 import { composeText } from "../utils/composeText";
-import extractArchive from "../utils/extractArchieve";
 import { makeDockerFile } from "../utils/makeDockerfile";
-import { exec } from "child_process";
 import type { Request, Response } from "express";
 import fs from "fs";
 import { execa } from "execa"
@@ -10,6 +8,7 @@ import { execa } from "execa"
 import { dirname } from 'path';
 import { fileURLToPath } from "url";
 import { createEnv } from "../utils/createEnv";
+import { createPackageFile } from "../utils/createPackageFile";
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -108,6 +107,7 @@ export const initUserFunction = async (req: Request, res: Response) => {
 
   const projectDir = path.join(__dirname, createDir)
   const dockerFiletext = makeDockerFile(runtime);
+  const packageText = createPackageFile(fn_name)
 
 
   // const envContent = createEnv('http://localhost:4342/api/v1', owner, fn_name)
@@ -123,7 +123,8 @@ export const initUserFunction = async (req: Request, res: Response) => {
   const files = [
     { name: "Dockerfile", content: dockerFiletext },
     { name: "compose.yaml", content: composeText },
-    { name: ".env", content: envContent }
+    { name: ".env", content: envContent },
+    { name: 'package.json', content: packageText }
   ]
 
   try {
@@ -145,55 +146,119 @@ export const initUserFunction = async (req: Request, res: Response) => {
     await execa('cp', [indexFileSource, indexFileDestination])
 
 
-    await execa('npm', ['init', '-y'], { cwd: projectDir });
-    console.log('npm init completed');
+    // await execa('npm', ['init', '-y'], { cwd: projectDir });
+    // console.log('npm init completed');
 
 
     // run normnal npm install
     await execa('npm', ['i'], { cwd: projectDir });
 
     // install nodemon as dependency
-    await execa('npm', ['i', "nodemon", "axios", "dotenv"], { cwd: projectDir });
-    console.log('dependency installed')
+    // await execa('npm', ['i', "nodemon", "axios", "dotenv"], { cwd: projectDir });
+    // console.log('dependency installed')
 
     //  // install nodemon as dev dependenci
     //  await execa('npm', ['i', "nodemon"], { cwd: projectDir });
 
-    const dockerCommand = 'docker compose up --build';  // Example command
-    const { stdout } = await execa(dockerCommand, { shell: true, cwd: projectDir });
-    console.log('Docker command output:', stdout);
+    // const dockerCommand = 'docker compose up --build';  // Example command
 
+    // console.log("above docker", projectDir)
+
+    await execa("docker", ["compose", "up", "--build", "-d"], { cwd: projectDir, stdio: 'inherit' })
 
   } catch (error) {
     console.log("error while setting up project", error)
   }
 
-  // if (!fs.existsSync(createDir)) {
-  //   fs.mkdirSync(createDir, { recursive: true })
-  // }
-
-
-  // fs.writeFile(createDir + "/Dockerfile", dockerFiletext, (err) => {
-  //   if (err) {
-  //     console.log("error while creating Dockerfile", err);
-  //   }
-  // });
-
-  // fs.writeFile(createDir + "/compose.yaml", composeText, (err) => {
-  //   if (err) {
-  //     console.log("error while creating compose file", err);
-  //   }
-
-  // });
-
-  // fs.writeFile(createDir + "/index.js", "// init", (err) => {
-  //   if (err) {
-  //     console.log("err while creating init file")
-  //   }
-  // })
-
-
   res.status(200).json({
     success: true
   })
+}
+
+
+export const getUserFunction = async (req: Request, res: Response) => {
+  const { owner, fn_name, fn_zip_file, runtime } = req.body;
+
+  const fnDir = `./src/controllers/src/function-buckets/${owner}/${fn_name}`;
+
+
+  // in the remote container, check if it is running
+  // halt the function, cleanup from docker
+  // delete the directory with everything
+  // send ok response..
+
+  console.log(fnDir, fs.existsSync(fnDir))
+
+  if (fs.existsSync(fnDir)) {
+    res.status(200).json({
+      success: true,
+      message: "Fucntion directory exists!"
+    })
+  } else {
+    res.status(404).json({
+      success: false,
+      message: "Function directory not found or Deleted!"
+    })
+  }
+
+
+
+
+}
+
+
+export const deleteUserFunction = async (req: Request, res: Response) => {
+  const fnName = req.params.fnName;
+  const userId = req.params.owner;
+  // const fnDir = `./src/function-buckets/${userId}/${fnName}`;
+  const fnDir = `./src/controllers/src/function-buckets/${userId}/${fnName}`;
+
+  let fnDownStatus = false;
+
+  try {
+
+
+    const dockerCommand = `docker ps --filter "ancestor=${fnName.toLowerCase()}-app" --format '{{.State}}'`
+    const { stdout } = await execa(dockerCommand, { shell: true })
+
+    console.log("while delete func", stdout.length)
+
+    // if length is greater than 0, image is running
+    // run docker compose down then.
+    if (stdout.length > 0) {
+
+      // const dockerDownCommand = `docker compose down`
+      const postDockerDown = await execa('docker', ['compose', 'down'], { cwd: fnDir });
+      console.log("docker container halter", postDockerDown)
+
+    }
+
+
+    fnDownStatus = true
+
+    console.log("nothing happened cause image is already down")
+
+    // console.log("isFnRunning", dockerCommand, isFnRunning.stdout.length)
+
+
+  } catch (error) {
+
+    fnDownStatus = false
+    console.log('error occured in deleteUserFunction in bucketcontroller', error)
+  }
+
+
+  if (fnDownStatus) {
+    fs.rm(fnDir, { recursive: true, force: true }, (err) => {
+      if (err) {
+        console.log('err occured while delete files', err)
+      }
+    })
+  }
+
+  res.status(200).json({
+    success: true,
+    message: 'function deleted successfully'
+  })
+
 }

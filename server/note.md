@@ -25,3 +25,9 @@ username: postgres
 hostname: host.docker.internal
 PASSWORD WHILE CREATING SERVER: admin 
 
+
+<!-- misc -->
+
+
+<!-- this outputs running if image is running else does nothing -->
+docker ps --filter "ancestor=$container-name" --format '{{.State}}'

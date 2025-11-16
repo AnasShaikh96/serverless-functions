@@ -9,7 +9,7 @@ import express from "express";
 const router = express.Router();
 
 router.get("/add-jobs/:id/:fn", addJobInQueue);
-router.get("/next", jobPoller);
+router.get("/next/:id/:fn", jobPoller);
 router.post("/response", getWorkerResponse);
 router.post("/error", getWorkerError);
 
