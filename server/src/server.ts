@@ -5,14 +5,14 @@ import functionRouter from "./api/functions/functionRouter";
 import pool from "./common/data/db";
 import { errorHandler } from "./common/utils/ApiError";
 import cookieParser from 'cookie-parser'
-import { dropAllTable } from "./common/migrations/20251024_dropAll_table";
-import { createUserTable } from "./common/migrations/20251026_createTableUsers";
-import { createFunctionTable } from "./common/migrations/20251026_createTableFunctions";
-import { createUsageTable } from "./common/migrations/20251026_createTableUsage";
+// import { dropAllTable } from "./common/migrations/20251024_dropAll_table";
+// import { createUserTable } from "./common/migrations/20251026_createTableUsers";
+// import { createFunctionTable } from "./common/migrations/20251026_createTableFunctions";
+// import { createUsageTable } from "./common/migrations/20251026_createTableUsage";
 import { config } from "./common/utils/config";
-import { AlterColumnFnName } from "./common/migrations/20251030_alterColumnFnName_functions";
-import { AlterColumnFnFileZip } from "./common/migrations/20251030_alterColumnFnFileZip_functions";
-import { AlterColumnFnNameConstrainst } from "./common/migrations/20251105_alterColumnFnName_functions";
+// import { AlterColumnFnName } from "./common/migrations/20251030_alterColumnFnName_functions";
+// import { AlterColumnFnFileZip } from "./common/migrations/20251030_alterColumnFnFileZip_functions";
+// import { AlterColumnFnNameConstrainst } from "./common/migrations/20251105_alterColumnFnName_functions";
 
 // const logger = pino({ name: "server start" });
 const app: Express = express();
