@@ -25,10 +25,10 @@ const GetAllFunctions = () => {
   console.log("tableData", tableData)
 
   return (
-    <div>
-      <div className='flex content-between'>
+    <div className='p-4'>
+      <div className='flex justify-between items-center mb-6'>
         <div>
-          <h2>All Functions</h2>
+          <h2 className='text-xl font-bold'>All Functions</h2>
         </div>
         <div>
           <Button onClick={() => navigate({ to: '/function/create' })}> Create new Function </Button>

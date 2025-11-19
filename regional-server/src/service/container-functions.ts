@@ -1,5 +1,5 @@
 import { execa } from "execa"
-import fs from 'fs'
+import fs from "fs";
 
 
 export const getContainerFunction = async (fnName: string, workingDir: string) => {
