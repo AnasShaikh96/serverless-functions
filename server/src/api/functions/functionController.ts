@@ -117,7 +117,12 @@ export const createFunctionHandler = catchAsync(
 
     // booting a docker container on create
     const functionInstance = await initiateFunction(data);
-    console.log("functionInstance", functionInstance)
+    const initSucces = await functionInstance.json();
+    // console.log("functionInstance", await functionInstance.json())
+
+    // if(initSucces){
+    //   await updateFunctionByIdService(data.id, {})
+    // }
 
 
     sendResponse(res, 200, "Function created & initialized successfully!", data);
